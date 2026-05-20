@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confrapag — Protótipo Redesign</title>
+
+  <!-- Fontes originais da Confrapag (hospedadas no próprio servidor) -->
+  <style>
+    @font-face {
+      font-family: 'Herokid';
+      src: url('https://confrapag.com.br/themes/confrapag/assets/fonts/Herokid-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Wonder Unit Sans';
+      src: url('https://confrapag.com.br/themes/confrapag/assets/fonts/WonderUnitSans-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Wonder Unit Sans';
+      src: url('https://confrapag.com.br/themes/confrapag/assets/fonts/WonderUnitSans-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ── BRAND TOKENS ── */
+    :root {
+      --navy:       #10104F;
+      --blue:       #139CF9;
+      --teal:       #17BFB9;
+      --green:      #11EF61;
+      --grad:       linear-gradient(90deg, #11EF61, #17BFB9, #139CF9);
+      --grad-45:    linear-gradient(135deg, #11EF61, #17BFB9 50%, #139CF9);
+      --grad-text:  linear-gradient(90deg, #11EF61, #1599FF);
+      --bg:         #fafafa;
+      --txt:        #111111;
+      --muted:      #666666;
+      --border:     #e5e5e5;
+      --navy-soft:  rgba(16,16,79,.07);
+      --shadow:     0 4px 28px rgba(16,16,79,.10);
+      --r:          12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Wonder Unit Sans', 'Helvetica Neue', sans-serif;
+      color: var(--txt); background: var(--bg); line-height: 1.6;
+      font-weight: 400;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: 'Herokid', 'Helvetica Neue', sans-serif;
+      font-weight: 600;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+    /* chips / tags */
+    .tag {
+      display: inline-block; font-family: 'Wonder Unit Sans', sans-serif;
+      background: var(--navy-soft); color: var(--navy);
+      font-size: 11px; font-weight: 500; letter-spacing: .09em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 18px;
+      border: 1px solid rgba(16,16,79,.12);
+    }
+    .tag-light {
+      display: inline-block; font-family: 'Wonder Unit Sans', sans-serif;
+      background: rgba(255,255,255,.12); color: #fff;
+      font-size: 11px; font-weight: 500; letter-spacing: .09em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    /* textos gradiente */
+    .gt { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* botões */
+    .btn {
+      display: inline-block; padding: 14px 28px; border-radius: var(--r);
+      font-family: 'Wonder Unit Sans', sans-serif; font-weight: 500; font-size: 15px;
+      cursor: pointer; border: none; transition: opacity .18s, transform .15s;
+      letter-spacing: .01em;
+    }
+    .btn:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-grad  { background: var(--grad); color: var(--navy); }
+    .btn-navy  { background: var(--navy); color: #fff; }
+    .btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.55); }
+    .btn-ghost:hover { background: #fff; color: var(--navy); opacity: 1; }
+    .btn-ghost-dark { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .btn-ghost-dark:hover { background: var(--navy); color: #fff; opacity: 1; }
+
+    /* barra de anotação */
+    .ann { background: #0a0a0a; color: #11EF61; padding: 8px 24px; font-size: 11px; font-weight: 500; text-align: center; letter-spacing: .06em; font-family: 'Wonder Unit Sans', monospace; }
+
+    /* ═══ NAV ═══════════════════════════════════════ */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1160px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; height: 72px;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-cta { display: flex; gap: 12px; align-items: center; }
+
+    /* ═══ HERO ══════════════════════════════════════ */
+    .hero {
+      background: var(--navy);
+      padding: 96px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before { /* linha gradiente no topo */
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--grad);
+    }
+    .hero::after { /* brilho radial canto direito */
+      content: ''; position: absolute; top: -150px; right: -150px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(19,156,249,.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      max-width: 1160px; margin: 0 auto; position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero h1 {
+      font-size: clamp(34px, 4vw, 56px); line-height: 1.07; letter-spacing: -.02em;
+      color: #fff; margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 17px; color: rgba(255,255,255,.68); margin-bottom: 36px;
+      max-width: 480px; line-height: 1.7; font-weight: 400;
+    }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 52px;
+      padding-top: 36px; border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .hstat strong { display: block; font-family: 'Herokid', sans-serif; font-size: 26px; color: #fff; }
+    .hstat small  { font-size: 12px; color: rgba(255,255,255,.45); font-weight: 400; }
+
+    /* card direito do hero */
+    .hero-card {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px; padding: 32px; backdrop-filter: blur(10px);
+    }
+    .hc-label { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+    .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+    .path-item {
+      border: 1px solid rgba(255,255,255,.14); border-radius: 10px;
+      padding: 18px 12px; text-align: center; cursor: pointer; transition: all .2s;
+    }
+    .path-item.on { border-color: var(--green); background: rgba(17,239,97,.07); }
+    .path-item .ico { font-size: 26px; margin-bottom: 6px; }
+    .path-item b { display: block; font-size: 13px; font-weight: 500; color: #fff; }
+    .path-item small { font-size: 11px; color: rgba(255,255,255,.45); }
+    .earn-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .earn-row:last-of-type { border-bottom: none; }
+    .earn-row span { font-size: 13px; color: rgba(255,255,255,.5); }
+    .earn-row b    { font-size: 13px; font-weight: 500; color: #fff; }
+    .earn-row b.hi { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-card .btn { width: 100%; text-align: center; margin-top: 20px; }
+
+    /* ═══ PAIN POINTS ═══════════════════════════════ */
+    .pain { background: #fff; padding: 88px 24px; }
+    .sh { text-align: center; margin-bottom: 52px; }
+    .sh h2 { font-size: clamp(26px, 3.2vw, 40px); line-height: 1.15; margin-bottom: 14px; }
+    .sh p  { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto; font-weight: 400; }
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 20px; }
+    .pain-card {
+      background: var(--bg); border-radius: var(--r); padding: 28px;
+      box-shadow: var(--shadow); position: relative; overflow: hidden;
+      border-left: 3px solid transparent;
+      border-image: linear-gradient(180deg, #11EF61, #139CF9) 1;
+    }
+    .pain-card h4 { font-size: 15px; margin-bottom: 10px; color: var(--navy); }
+    .pain-card p  { font-size: 14px; color: var(--muted); line-height: 1.55; font-weight: 400; }
+
+    /* ═══ DOIS CAMINHOS ══════════════════════════════ */
+    .caminhos { background: var(--bg); padding: 88px 24px; }
+    .caminhos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .cc { border-radius: 20px; padding: 40px; position: relative; overflow: hidden; }
+    .cc.lic { background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .cc.wl  { background: var(--navy); color: #fff; }
+    .cc.wl::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+    .cc-badge {
+      display: inline-block; padding: 4px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 16px;
+    }
+    .lic .cc-badge { background: var(--navy-soft); color: var(--navy); }
+    .wl  .cc-badge { background: rgba(17,239,97,.13); color: var(--green); }
+    .cc h3 { font-size: 26px; margin-bottom: 10px; line-height: 1.2; }
+    .cc .sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; font-weight: 400; }
+    .wl .sub { color: rgba(255,255,255,.6); }
+    .feat-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .feat-list li { font-size: 14px; display: flex; align-items: flex-start; gap: 10px; font-weight: 400; }
+    .feat-list li::before {
+      content: ''; flex-shrink: 0; margin-top: 5px;
+      width: 14px; height: 14px; border-radius: 50%; background: var(--grad);
+    }
+    .earn-box {
+      border-radius: 10px; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
+    }
+    .lic .earn-box { background: var(--bg); border: 1px solid var(--border); }
+    .wl  .earn-box { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); }
+    .earn-box span { font-size: 12px; color: var(--muted); font-weight: 400; }
+    .wl .earn-box span { color: rgba(255,255,255,.5); }
+    .earn-box strong { font-family: 'Herokid', sans-serif; font-size: 20px; }
+    .lic .earn-box strong { color: var(--navy); }
+    .wl  .earn-box strong { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ═══ QUANTO POSSO GANHAR ════════════════════════ */
+    .ganhar { background: var(--navy); padding: 88px 24px; }
+    .ganhar .sh h2 { color: #fff; }
+    .ganhar .sh p  { color: rgba(255,255,255,.55); }
+    .ganhar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px; }
+    .gc {
+      border-radius: var(--r); padding: 32px 28px; text-align: center;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      position: relative; overflow: hidden;
+    }
+    .gc.hi { background: rgba(255,255,255,.09); border-color: rgba(17,239,97,.35); }
+    .gc.hi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+    .gc-nivel { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.45); margin-bottom: 12px; }
+    .gc-val   { font-family: 'Herokid', sans-serif; font-size: 42px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+    .gc-per   { font-size: 12px; color: rgba(255,255,255,.38); margin-bottom: 20px; }
+    .gc-desc  { font-size: 13px; color: rgba(255,255,255,.62); line-height: 1.55; font-weight: 400; }
+    .ganhar-disc { text-align: center; font-size: 12px; color: rgba(255,255,255,.3); margin-top: 28px; font-weight: 400; }
+
+    /* ═══ COMPARATIVO ════════════════════════════════ */
+    .diferencial { background: #fff; padding: 88px 24px; }
+    .comp-table { width: 100%; border-collapse: collapse; margin-top: 48px; border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow); }
+    .comp-table th { padding: 18px 24px; font-size: 13px; font-weight: 600; text-align: center; font-family: 'Wonder Unit Sans', sans-serif; }
+    .comp-table th:first-child { text-align: left; background: var(--bg); color: var(--muted); }
+    .comp-table th.col-sem { background: #fef2f2; color: #b42318; }
+    .comp-table th.col-com { background: var(--navy); color: #fff; position: relative; }
+    .comp-table th.col-com::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+    .comp-table td { padding: 14px 24px; font-size: 14px; border-bottom: 1px solid #f1f5f9; text-align: center; font-weight: 400; }
+    .comp-table td:first-child { text-align: left; font-weight: 500; background: var(--bg); }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .neg { color: #b42318; font-weight: 500; }
+    .pos { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 600; }
+
+    /* ═══ CASES ══════════════════════════════════════ */
+    .cases { background: var(--bg); padding: 88px 24px; }
+    .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 52px; }
+    .case-card {
+      background: #fff; border-radius: var(--r); padding: 32px; box-shadow: var(--shadow);
+      border-top: 3px solid transparent; border-image: var(--grad) 1;
+    }
+    .ba { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+    .pill { flex: 1; border-radius: 8px; padding: 10px 12px; font-size: 11px; text-align: center; font-weight: 400; }
+    .pill b { display: block; font-size: 13px; font-weight: 500; }
+    .pill.antes  { background: #fef2f2; color: #b42318; }
+    .pill.depois { background: rgba(17,239,97,.1); color: #027a48; }
+    .arr { font-size: 18px; color: var(--muted); flex-shrink: 0; }
+    .cq { font-size: 14px; color: var(--muted); font-style: italic; line-height: 1.55; margin-bottom: 20px; border-left: 3px solid var(--teal); padding-left: 14px; font-weight: 400; }
+    .cp { display: flex; align-items: center; gap: 12px; }
+    .cp-av { width: 44px; height: 44px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .cp b    { display: block; font-size: 14px; font-weight: 600; color: var(--navy); }
+    .cp span { font-size: 12px; color: var(--muted); }
+
+    /* ═══ UNIVERSIDADE ════════════════════════════════ */
+    .universidade { background: var(--navy); padding: 88px 24px; }
+    .univ-grid {
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+    .universidade h2 { font-size: clamp(28px, 3.5vw, 44px); color: #fff; margin-bottom: 16px; line-height: 1.15; }
+    .universidade p  { font-size: 16px; color: rgba(255,255,255,.65); margin-bottom: 36px; font-weight: 400; }
+    .uf-list { display: flex; flex-direction: column; gap: 12px; }
+    .uf {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    }
+    .uf .ico { font-size: 22px; flex-shrink: 0; }
+    .uf b    { display: block; font-size: 14px; font-weight: 500; color: #fff; }
+    .uf span { font-size: 12px; color: rgba(255,255,255,.48); font-weight: 400; }
+    .univ-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .us {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 28px 20px; text-align: center;
+    }
+    .us strong { display: block; font-family: 'Herokid', sans-serif; font-size: 36px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .us span   { font-size: 12px; color: rgba(255,255,255,.45); font-weight: 400; }
+
+    /* ═══ MARCAS WL ══════════════════════════════════ */
+    .marcas { background: #fff; padding: 72px 24px; }
+    .marcas h2 { font-size: 18px; font-weight: 500; text-align: center; color: var(--muted); margin-bottom: 8px; font-family: 'Wonder Unit Sans', sans-serif; }
+    .marcas-sub { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 36px; font-weight: 400; }
+    .marcas-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .mpill {
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 28px; font-size: 15px; font-weight: 500; color: var(--navy); background: var(--bg);
+      transition: all .2s; font-family: 'Wonder Unit Sans', sans-serif;
+    }
+    .mpill:hover { border-color: var(--teal); color: var(--teal); }
+    .mpill.next { border-style: dashed; border-color: var(--green); color: var(--green); }
+
+    /* ═══ JORNADA ════════════════════════════════════ */
+    .jornada { background: var(--bg); padding: 88px 24px; }
+    .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 52px; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 30px; left: 10%; right: 10%; height: 2px; background: var(--grad); z-index: 0; }
+    .step { text-align: center; position: relative; z-index: 1; }
+    .step-n {
+      width: 62px; height: 62px; border-radius: 50%; background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Herokid', sans-serif; font-size: 20px; color: #fff;
+      margin: 0 auto 16px;
+      box-shadow: 0 0 0 3px var(--teal), 0 0 0 7px var(--bg);
+    }
+    .step h4 { font-size: 13px; color: var(--navy); margin-bottom: 6px; }
+    .step p   { font-size: 12px; color: var(--muted); line-height: 1.45; padding: 0 8px; font-weight: 400; }
+
+    /* ═══ CTA FINAL ══════════════════════════════════ */
+    .cta-final {
+      background: var(--navy); padding: 100px 24px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-final::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+    .cta-final::after {
+      content: ''; position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(23,191,185,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-final h2 { font-size: clamp(28px, 4vw, 50px); color: #fff; line-height: 1.1; margin-bottom: 16px; position: relative; }
+    .cta-final p  { font-size: 18px; color: rgba(255,255,255,.65); margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; position: relative; font-weight: 400; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    /* ═══ FOOTER ═════════════════════════════════════ */
+    footer { background: #000811; color: rgba(255,255,255,.4); padding: 48px 24px; text-align: center; }
+    footer p { font-size: 13px; font-weight: 400; }
+    footer p + p { margin-top: 8px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-grid, .caminhos-grid, .univ-grid { grid-template-columns: 1fr; }
+      .hero-card { display: none; }
+      .ganhar-grid, .cases-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .steps::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- barra de anotação de design -->
+<div class="ann">PROTÓTIPO DE REDESIGN · confrapag.com.br · Referência para Douglas e Bruno · 18/05/2026</div>
+
+<!-- ═══ NAV ══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <!-- logo original do site -->
+    <a href="#">
+      <svg width="120" height="39" viewBox="0 0 98 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:36px;width:auto">
+        <path d="M18.8625 6.17272C19.4446 5.59062 19.4446 4.64568 18.8625 4.06247L15.2374 0.437403C14.958 0.158039 14.5785 0 14.1823 0C13.786 0 13.4076 0.156926 13.1271 0.437403L0.512344 13.0522C0.23298 13.3316 0.0749308 13.7111 0.0749308 14.1073C0.0749308 14.5036 0.231867 14.882 0.512344 15.1625L4.01274 18.6629L0.467821 22.0097C-0.130975 22.5751 -0.158799 23.52 0.406607 24.1188L7.40518 31.5325C7.69902 31.843 8.09413 32 8.49036 32C8.85765 32 9.22606 31.8653 9.51432 31.5926L13.0682 28.2369C13.3553 27.9654 13.5234 27.5903 13.5356 27.1951C13.5467 26.8 13.4009 26.4161 13.1294 26.1278L6.22094 18.8109C6.22873 18.8031 6.23875 18.7964 6.24654 18.7875L18.8613 6.17272H18.8625ZM14.1823 1.49253L17.8073 5.11759L5.19253 17.7324L1.56747 14.1073L14.1823 1.49253ZM8.49259 30.5063L1.49401 23.0926L5.04784 19.7369L12.0464 27.1506L8.49259 30.5063Z" fill="url(#lg_nav)"/>
+        <path d="M21.5803 23.2592C20.8991 22.8786 20.366 22.3499 19.9787 21.6754C19.5914 21.0009 19.3977 20.2296 19.3977 19.3604C19.3977 18.4911 19.5914 17.7354 19.9787 17.0542C20.366 16.3742 20.9003 15.8455 21.5803 15.4704C22.2604 15.0953 23.0294 14.9072 23.8865 14.9072C24.6845 14.9072 25.359 15.0475 25.911 15.3302C26.4619 15.6118 26.9027 15.9813 27.231 16.4387L25.8053 17.7587C25.606 17.466 25.3501 17.2367 25.0395 17.072C24.729 16.9073 24.3795 16.826 23.9922 16.826C23.311 16.826 22.7512 17.0576 22.3116 17.5217C21.8719 17.9858 21.6515 18.598 21.6515 19.3615C21.6515 20.125 21.8686 20.7372 22.3026 21.2013C22.7367 21.6654 23.2999 21.8969 23.9922 21.8969C24.3795 21.8969 24.7257 21.8145 25.0306 21.6509C25.3356 21.4862 25.5938 21.258 25.8053 20.9642L27.231 22.302C26.9027 22.7483 26.4597 23.1145 25.9021 23.4017C25.3445 23.6888 24.6722 23.8324 23.8865 23.8324C23.0294 23.8324 22.2615 23.6421 21.5803 23.2603V23.2592Z" fill="#10104F"/>
+        <path d="M30.2929 23.2326C29.6117 22.8342 29.0897 22.2944 28.7258 21.6132C28.3618 20.9332 28.1804 20.1819 28.1804 19.3605C28.1804 18.5391 28.3618 17.8056 28.7258 17.1245C29.0897 16.4444 29.6117 15.9046 30.2929 15.505C30.973 15.1066 31.7598 14.9062 32.6514 14.9062C33.5429 14.9062 34.3442 15.1055 35.0187 15.505C35.6932 15.9046 36.213 16.4411 36.5769 17.1155C36.9409 17.79 37.1223 18.5391 37.1223 19.3594C37.1223 20.1797 36.9398 20.9321 36.5769 21.6121C36.213 22.2933 35.6932 22.8331 35.0187 23.2315C34.3442 23.63 33.5551 23.8303 32.6514 23.8303C31.7476 23.8303 30.973 23.6311 30.2929 23.2315V23.2326ZM34.2719 21.1825C34.6704 20.7072 34.8707 20.0995 34.8707 19.3605C34.8707 18.6215 34.6715 18.0282 34.2719 17.5474C33.8723 17.0666 33.3325 16.8262 32.6525 16.8262C31.9724 16.8262 31.4471 17.0666 31.042 17.5474C30.6368 18.0282 30.4343 18.6326 30.4343 19.3605C30.4343 20.0884 30.6368 20.6928 31.042 21.1736C31.4471 21.6544 31.9836 21.8948 32.6525 21.8948C33.3214 21.8948 33.8723 21.6566 34.2719 21.1814V21.1825Z" fill="#10104F"/>
+        <path d="M40.8541 15.1187V16.1393C41.1357 15.752 41.5375 15.4504 42.0595 15.2333C42.5815 15.0163 43.177 14.9072 43.8459 14.9072C44.7608 14.9072 45.4508 15.1454 45.9139 15.6207C46.3769 16.0959 46.6095 16.7615 46.6095 17.6185V23.6209H44.4269V18.4633C44.4269 17.889 44.2922 17.4716 44.0217 17.2134C43.7513 16.9552 43.3584 16.826 42.842 16.826C42.3255 16.826 41.8937 16.973 41.4774 17.2657C41.0612 17.5595 40.853 17.9635 40.853 18.48V23.6198H38.6882V15.1176H40.853L40.8541 15.1187Z" fill="#10104F"/>
+        <path d="M49.3386 14.5378C49.3386 13.693 49.5991 13.0097 50.1222 12.4877C50.6442 11.9657 51.322 11.7041 52.1556 11.7041H53.3877V13.3413H52.6131C52.2847 13.3413 52.0198 13.4471 51.8206 13.6585C51.6214 13.87 51.5212 14.1627 51.5212 14.5389V15.1199H53.2464V17.0209H51.5212V23.6222H49.3386V17.0209H47.9307V15.1199H49.3386V14.5389V14.5378Z" fill="#10104F"/>
+        <path d="M56.7134 15.1188V16.1216C57.0061 15.7577 57.4057 15.465 57.9099 15.2413C58.4141 15.0187 58.9249 14.9062 59.4413 14.9062V17.0365C59.2533 16.9898 59.0485 16.9664 58.8259 16.9664C58.5554 16.9664 58.2538 17.0165 57.9188 17.1155C57.5849 17.2157 57.2999 17.356 57.0651 17.5385C56.8302 17.721 56.7134 17.9292 56.7134 18.1629V23.62H54.5486V15.1177H56.7134V15.1188Z" fill="#10104F"/>
+        <path d="M62.2317 15.2413C62.8594 15.0187 63.5194 14.9062 64.2117 14.9062C65.3036 14.9062 66.1951 15.1589 66.8874 15.6631C67.5797 16.1673 67.9258 16.9831 67.9258 18.1095V23.6189H65.7432V22.8264C65.4616 23.1547 65.0832 23.404 64.608 23.5743C64.1327 23.7446 63.6074 23.8292 63.0331 23.8292C62.54 23.8292 62.0703 23.729 61.6251 23.5298C61.1788 23.3306 60.8126 23.0256 60.5255 22.6149C60.2383 22.2042 60.0947 21.7056 60.0947 21.1191C60.0947 20.2509 60.3852 19.5964 60.9662 19.1568C61.5472 18.7172 62.2361 18.4968 63.0342 18.4968C63.5973 18.4968 64.1372 18.4912 64.6536 18.479C65.17 18.4678 65.534 18.4378 65.7454 18.3911V17.9158C65.7454 17.4817 65.5785 17.1534 65.2435 16.9297C64.9096 16.7071 64.4488 16.5947 63.8622 16.5947C63.4048 16.5947 62.9585 16.6826 62.5244 16.8585C62.0903 17.0343 61.703 17.287 61.3624 17.6153L60.5355 16.2597C61.0397 15.8022 61.6062 15.4616 62.2339 15.239L62.2317 15.2413ZM65.1633 22.1152C65.5273 21.9449 65.721 21.6544 65.7443 21.2437V19.8881C65.5562 19.9237 65.2925 19.9404 64.9519 19.9404L63.9134 19.9226C63.4438 19.9226 63.0542 20.0372 62.7426 20.2654C62.432 20.4946 62.2762 20.7907 62.2762 21.1546C62.2762 21.5542 62.4287 21.8559 62.7337 22.0606C63.0386 22.2666 63.4315 22.369 63.9134 22.369C64.3954 22.369 64.7994 22.2844 65.1633 22.1141V22.1152Z" fill="#10104F"/>
+        <path d="M72.3267 22.5116V26.8589H70.1619V15.1178H72.3267V16.2086C72.655 15.7857 73.0512 15.464 73.5153 15.2403C73.9784 15.0177 74.4692 14.9053 74.9856 14.9053C75.7135 14.9053 76.3613 15.0811 76.9312 15.4328C77.4999 15.7845 77.9429 16.2954 78.2601 16.9643C78.5773 17.6332 78.7353 18.4313 78.7353 19.3584C78.7353 20.2855 78.574 21.0869 78.2512 21.7614C77.9284 22.4359 77.4854 22.949 76.9223 23.3018C76.3591 23.6535 75.7135 23.8293 74.9856 23.8293C73.8359 23.8293 72.9499 23.3897 72.3278 22.5093L72.3267 22.5116ZM75.8827 21.2004C76.2934 20.7374 76.4982 20.1242 76.4982 19.3606C76.4982 18.5971 76.2923 17.985 75.8827 17.5208C75.472 17.0578 74.9433 16.8252 74.2989 16.8252C74.0284 16.8252 73.7413 16.9076 73.4363 17.0712C73.1314 17.2359 72.8698 17.473 72.6528 17.7846C72.4357 18.0951 72.3267 18.4569 72.3267 18.8676V19.7123C72.3267 20.487 72.5348 21.0446 72.9511 21.3841C73.3673 21.7246 73.8159 21.8949 74.2978 21.8949C74.9433 21.8949 75.4709 21.6634 75.8816 21.1993L75.8827 21.2004Z" fill="#10104F"/>
+        <path d="M82.0342 15.2413C82.6619 15.0187 83.3219 14.9062 84.0142 14.9062C85.1061 14.9062 85.9976 15.1589 86.6899 15.6631C87.3822 16.1673 87.7283 16.9831 87.7283 18.1095V23.6189H85.5457V22.8264C85.2641 23.1547 84.8857 23.404 84.4104 23.5743C83.9352 23.7446 83.4099 23.8292 82.8355 23.8292C82.3425 23.8292 81.8728 23.729 81.4276 23.5298C80.9813 23.3306 80.6151 23.0256 80.3279 22.6149C80.0408 22.2042 79.8972 21.7056 79.8972 21.1191C79.8972 20.2509 80.1877 19.5964 80.7687 19.1568C81.3497 18.7172 82.0386 18.4968 82.8367 18.4968C83.3998 18.4968 83.9397 18.4912 84.4561 18.479C84.9725 18.4678 85.3365 18.4378 85.5479 18.3911V17.9158C85.5479 17.4817 85.381 17.1534 85.046 16.9297C84.7121 16.7071 84.2513 16.5947 83.6647 16.5947C83.2073 16.5947 82.761 16.6826 82.3269 16.8585C81.8928 17.0343 81.5055 17.287 81.1649 17.6153L80.338 16.2597C80.8422 15.8022 81.4087 15.4616 82.0364 15.239L82.0342 15.2413ZM84.9647 22.1152C85.3287 21.9449 85.5223 21.6544 85.5457 21.2437V19.8881C85.3576 19.9237 85.0938 19.9404 84.7533 19.9404L83.7148 19.9226C83.2451 19.9226 82.8556 20.0372 82.5439 20.2654C82.2334 20.4946 82.0776 20.7907 82.0776 21.1546C82.0776 21.5542 82.2301 21.8559 82.535 22.0606C82.84 22.2666 83.2329 22.369 83.7148 22.369C84.1968 22.369 84.6008 22.2844 84.9647 22.1141V22.1152Z" fill="#10104F"/>
+        <path d="M91.4603 26.7886C90.8849 26.5893 90.334 26.261 89.8053 25.8024L90.7914 24.2186C91.4136 24.9231 92.2995 25.2749 93.4493 25.2749C94.1059 25.2749 94.6669 25.099 95.1299 24.7473C95.5929 24.3956 95.8255 23.838 95.8255 23.0756V22.2653C95.239 23.1334 94.3586 23.5675 93.1855 23.5675C92.4576 23.5675 91.8098 23.4006 91.24 23.0656C90.6712 22.7305 90.2249 22.2386 89.9021 21.5875C89.5794 20.9364 89.418 20.1528 89.418 19.2379C89.418 18.323 89.5794 17.5573 89.9021 16.9051C90.2249 16.254 90.6701 15.7587 91.24 15.4181C91.8087 15.0775 92.4576 14.9072 93.1855 14.9072C93.7487 14.9072 94.2473 14.9929 94.6814 15.1621C95.1154 15.3324 95.4972 15.6407 95.8255 16.0859V15.1176H98.0081V23.0733C98.0081 24.5169 97.5652 25.5464 96.6792 26.163C95.7933 26.7785 94.717 27.0868 93.4493 27.0868C92.698 27.0868 92.0346 26.9867 91.4603 26.7874V26.7886ZM95.2089 21.1734C95.6196 20.8562 95.8255 20.3231 95.8255 19.5718V18.7972C95.8255 18.0926 95.6196 17.5884 95.2089 17.2835C94.7982 16.9785 94.3464 16.826 93.8533 16.826C93.1955 16.826 92.6679 17.0397 92.2695 17.4683C91.8699 17.8968 91.6707 18.4866 91.6707 19.2368C91.6707 19.987 91.8699 20.578 92.2695 21.0054C92.6679 21.4339 93.1966 21.6476 93.8533 21.6476C94.3464 21.6476 94.7982 21.4895 95.2089 21.1723V21.1734Z" fill="#10104F"/>
+        <defs>
+          <linearGradient id="lg_nav" x1="0" y1="16" x2="19.3" y2="16" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#15F35B"/>
+            <stop offset="1" stop-color="#1599FF"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Licenciado</a></li>
+      <li><a href="#">White Label</a></li>
+      <li><a href="#">Soluções</a></li>
+      <li><a href="#">Universidade</a></li>
+      <li><a href="#">Cases</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="btn btn-ghost-dark" href="#">Fale conosco</a>
+      <a class="btn btn-grad" href="#">Quero começar</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="tag-light">Meios de Pagamento · 500+ parceiros ativos no Brasil</div>
+      <h1>Monte seu próprio<br>negócio de<br><span class="gt">pagamentos.</span></h1>
+      <p class="hero-sub">
+        Tecnologia, gestão financeira, jurídico, treinamento e marca — tudo pronto.
+        Você escolhe: distribuir com a marca Confrapag ou criar sua própria fintech.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-grad" href="#">Quero ser Licenciado</a>
+        <a class="btn btn-ghost" href="#">Quero minha própria marca</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><strong><span class="gt">R$ 2,1 bi+</span></strong><small>processados na rede</small></div>
+        <div class="hstat"><strong><span class="gt">500+</span></strong><small>parceiros ativos</small></div>
+        <div class="hstat"><strong><span class="gt">18 estados</span></strong><small>presença nacional</small></div>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hc-label">Escolha seu caminho</div>
+      <div class="path-grid">
+        <div class="path-item on"><div class="ico">🤝</div><b>Licenciado</b><small>Marca Confrapag</small></div>
+        <div class="path-item"><div class="ico">🏷️</div><b>White Label</b><small>Sua própria marca</small></div>
+      </div>
+      <div class="earn-row"><span>Potencial mensal estimado</span></div>
+      <div class="earn-row"><span>Início de operação</span><b>R$ 5k – 15k</b></div>
+      <div class="earn-row"><span>Carteira consolidada</span><b>R$ 20k – 60k</b></div>
+      <div class="earn-row"><span>White Label (rede própria)</span><b class="hi">R$ 80k+</b></div>
+      <a class="btn btn-grad" href="#">Ver como funciona →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PAIN POINTS — NOVO ════════════════════════════ -->
+<section class="pain">
+  <div class="container">
+    <div class="sh">
+      <div class="tag">Você se identifica?</div>
+      <h2>Reconhece alguma dessas situações?</h2>
+      <p>Essas são as dores que a Confrapag resolve todos os dias para centenas de empreendedores.</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <h4>"Quero entrar no mercado de pagamentos mas não sei por onde começar."</h4>
+        <p>Estrutura completa, treinamento e suporte desde o dia 1 — sem precisar reinventar a roda.</p>
+      </div>
+      <div class="pain-card">
+        <h4>"Tenho uma marca mas não tenho tecnologia para processar pagamentos."</h4>
+        <p>Com o White Label, você coloca sua marca em cima de toda a infraestrutura da Confrapag.</p>
+      </div>
+      <div class="pain-card">
+        <h4>"Revendo maquininhas mas não tenho gestão nem suporte especializado."</h4>
+        <p>Como Licenciado você tem gerente comercial dedicado, universidade e controladoria.</p>
+      </div>
+      <div class="pain-card">
+        <h4>"Quero ter minha fintech mas o custo de montar do zero é proibitivo."</h4>
+        <p>Estrutura própria custa R$ 2M+. Aqui você acessa tudo isso por uma fração do investimento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DOIS CAMINHOS ══════════════════════════════════ -->
+<section class="caminhos">
+  <div class="container">
+    <div class="sh">
+      <div class="tag">Dois modelos, um ecossistema</div>
+      <h2>Qual é o seu perfil de empreendedor?</h2>
+      <p>Cada caminho tem estrutura, investimento e potencial de retorno diferentes.</p>
+    </div>
+    <div class="caminhos-grid">
+      <div class="cc lic">
+        <span class="cc-badge">Licenciado Autorizado</span>
+        <h3>Use a força da marca Confrapag</h3>
+        <p class="sub">Ideal para quem quer começar rápido, com estrutura pronta e suporte contínuo.</p>
+        <ul class="feat-list">
+          <li>Marca e credibilidade Confrapag desde o dia 1</li>
+          <li>Portfólio completo: TEF, PIX, Hub, Energia, Online</li>
+          <li>Gerente comercial dedicado</li>
+          <li>Universidade Confrapag (CFI + Club 714)</li>
+          <li>Plataforma de gestão integrada</li>
+          <li>Possibilidade de montar rede White Label própria</li>
+        </ul>
+        <div class="earn-box"><span>Faturamento mensal estimado</span><strong>R$ 5k – 60k</strong></div>
+        <a class="btn btn-navy" href="#">Quero ser Licenciado →</a>
+      </div>
+      <div class="cc wl">
+        <span class="cc-badge">White Label</span>
+        <h3>Crie sua própria fintech</h3>
+        <p class="sub">Para quem quer ter uma marca própria no mercado de meios de pagamento.</p>
+        <ul class="feat-list">
+          <li>Marca 100% sua — nome, cores, identidade</li>
+          <li>Tecnologia, BaaS e compliance inclusos</li>
+          <li>Gestão financeira e controladoria especializada</li>
+          <li>Suporte jurídico e regulatório (Banco Central)</li>
+          <li>Escale montando sua própria rede de licenciados</li>
+          <li>Produtos exclusivos sob sua marca</li>
+        </ul>
+        <div class="earn-box"><span>Faturamento mensal estimado</span><strong>R$ 30k – 200k+</strong></div>
+        <a class="btn btn-grad" href="#">Quero minha própria marca →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUANTO POSSO GANHAR — NOVO ════════════════════ -->
+<section class="ganhar">
+  <div class="container">
+    <div class="sh">
+      <div class="tag-light">Potencial de ganho</div>
+      <h2>Quanto posso ganhar com a Confrapag?</h2>
+      <p>Estimativas baseadas na performance real dos parceiros ativos na rede.</p>
+    </div>
+    <div class="ganhar-grid">
+      <div class="gc">
+        <div class="gc-nivel">Licenciado · Início</div>
+        <div class="gc-val">R$ 5k</div>
+        <div class="gc-per">– R$ 15k / mês</div>
+        <div class="gc-desc">Carteira de 30 a 80 estabelecimentos. Receita recorrente de residual + comissão de novos credenciamentos.</div>
+      </div>
+      <div class="gc hi">
+        <div class="gc-nivel">Licenciado · Consolidado</div>
+        <div class="gc-val">R$ 20k</div>
+        <div class="gc-per">– R$ 60k / mês</div>
+        <div class="gc-desc">Carteira de 150+ clientes ativos, múltiplos produtos por cliente (TEF, Energia, Hub). Receita recorrente estável.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-nivel">White Label · Rede ativa</div>
+        <div class="gc-val">R$ 80k</div>
+        <div class="gc-per">– R$ 200k+ / mês</div>
+        <div class="gc-desc">Receita sobre toda a rede própria de licenciados. Quanto maior o TPV, maior a margem sobre intercâmbio.</div>
+      </div>
+    </div>
+    <p class="ganhar-disc">* Estimativas baseadas em dados da rede. Resultados individuais variam. Consulte nosso time para projeção personalizada.</p>
+  </div>
+</section>
+
+<!-- ═══ COMPARATIVO — NOVO ════════════════════════════ -->
+<section class="diferencial">
+  <div class="container">
+    <div class="sh">
+      <div class="tag">Por que Confrapag?</div>
+      <h2>A diferença entre "revender maquininha"<br>e montar um negócio de verdade</h2>
+    </div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>O que você precisa</th>
+          <th class="col-sem">Distribuidor convencional</th>
+          <th class="col-com">Com a Confrapag</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Tecnologia de credenciamento</td><td><span class="neg">Você monta do zero</span></td><td><span class="pos">Incluído</span></td></tr>
+        <tr><td>Gestão financeira e controladoria</td><td><span class="neg">Não incluso</span></td><td><span class="pos">Especializada e dedicada</span></td></tr>
+        <tr><td>Suporte jurídico e compliance</td><td><span class="neg">Por sua conta</span></td><td><span class="pos">Equipe interna Confrapag</span></td></tr>
+        <tr><td>Treinamento e desenvolvimento</td><td><span class="neg">Treinamento básico de produto</span></td><td><span class="pos">Universidade Confrapag + Club 714</span></td></tr>
+        <tr><td>Portfólio de produtos</td><td><span class="neg">1 bandeira / 1 produto</span></td><td><span class="pos">TEF, PIX, Hub, Energia, Online</span></td></tr>
+        <tr><td>Possibilidade de marca própria</td><td><span class="neg">Não</span></td><td><span class="pos">White Label disponível</span></td></tr>
+        <tr><td>Gerente comercial dedicado</td><td><span class="neg">Não</span></td><td><span class="pos">Desde o primeiro dia</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ CASES — PLACEHOLDERS ════════════════════════ -->
+<section class="cases">
+  <div class="container">
+    <div class="sh">
+      <div class="tag">Cases reais</div>
+      <h2>Vidas transformadas pelo ecossistema Confrapag</h2>
+      <p>Histórias reais de empreendedores que saíram do emprego formal e construíram negócios próprios.</p>
+    </div>
+    <div class="cases-grid">
+      <div class="case-card">
+        <div class="ba"><div class="pill antes"><span>Antes</span><b>CLT R$ 2.800/mês</b></div><div class="arr">→</div><div class="pill depois"><span>Depois</span><b>R$ 28k/mês</b></div></div>
+        <p class="cq">"Em 14 meses construí uma carteira de 120 clientes. O gerente da Confrapag me ensinou a vender valor, não maquininha."</p>
+        <div class="cp"><div class="cp-av">👤</div><div><b>[Nome do parceiro]</b><span>Licenciado · Goiás · 2 anos de rede</span></div></div>
+      </div>
+      <div class="case-card">
+        <div class="ba"><div class="pill antes"><span>Antes</span><b>Autônomo informal</b></div><div class="arr">→</div><div class="pill depois"><span>Depois</span><b>Fintech própria ativa</b></div></div>
+        <p class="cq">"Hoje tenho minha própria marca com 18 licenciados trabalhando sob ela. Nunca imaginei que seria possível."</p>
+        <div class="cp"><div class="cp-av">👤</div><div><b>[Nome do parceiro]</b><span>White Label · Mato Grosso · 3 anos</span></div></div>
+      </div>
+      <div class="case-card">
+        <div class="ba"><div class="pill antes"><span>Antes</span><b>Revendedor Stone</b></div><div class="arr">→</div><div class="pill depois"><span>Depois</span><b>R$ 65k MRR</b></div></div>
+        <p class="cq">"Antes vendia só maquininha. Hoje vendo TEF, energia, antecipação. O ticket médio triplicou em 8 meses."</p>
+        <div class="cp"><div class="cp-av">👤</div><div><b>[Nome do parceiro]</b><span>Licenciado + WL · São Paulo · 18 meses</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ UNIVERSIDADE ══════════════════════════════════ -->
+<section class="universidade">
+  <div class="univ-grid">
+    <div>
+      <div class="tag-light">Universidade Confrapag</div>
+      <h2>O único ecossistema de pagamentos com universidade própria</h2>
+      <p>Você não recebe um manual. Recebe um programa completo de desenvolvimento — do zero ao avançado.</p>
+      <div class="uf-list">
+        <div class="uf"><div class="ico">🎓</div><div><b>CFI — Capacitação Inicial</b><span>Treinamento gratuito e obrigatório antes de começar a operar</span></div></div>
+        <div class="uf"><div class="ico">🏆</div><div><b>Club 714 — Desenvolvimento Executivo</b><span>Mindset, liderança e performance para escalar seu negócio</span></div></div>
+        <div class="uf"><div class="ico">🎪</div><div><b>Convenção Nacional Anual</b><span>Imersão, reconhecimento e networking com toda a rede</span></div></div>
+        <div class="uf"><div class="ico">📱</div><div><b>Trilhas digitais e ao vivo</b><span>Vendas, gestão financeira, expansão de equipes</span></div></div>
+      </div>
+    </div>
+    <div class="univ-stats">
+      <div class="us"><strong>500+</strong><span>parceiros formados</span></div>
+      <div class="us"><strong>100%</strong><span>gratuito para a rede</span></div>
+      <div class="us"><strong>12+</strong><span>trilhas de conteúdo</span></div>
+      <div class="us"><strong>1×/ano</strong><span>Convenção Nacional</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARCAS WL ══════════════════════════════════════ -->
+<section class="marcas">
+  <div class="container">
+    <h2>Marcas construídas sobre a infraestrutura Confrapag</h2>
+    <p class="marcas-sub">Essas empresas já estão operando. A sua pode ser a próxima.</p>
+    <div class="marcas-row">
+      <div class="mpill">AraguaiaPay</div>
+      <div class="mpill">Athos Pay</div>
+      <div class="mpill">BullBank</div>
+      <div class="mpill">LibberPay</div>
+      <div class="mpill next">+ sua marca aqui</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ JORNADA ════════════════════════════════════════ -->
+<section class="jornada">
+  <div class="container">
+    <div class="sh">
+      <div class="tag">Do zero ao negócio em operação</div>
+      <h2>O que acontece depois que você assina?</h2>
+      <p>Cada etapa tem suporte ativo. Você nunca fica sozinho.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><h4>Análise de perfil</h4><p>Nosso time entende seu mercado, região e objetivos. Proposta personalizada.</p></div>
+      <div class="step"><div class="step-n">2</div><h4>Contrato e acesso</h4><p>Formalização e acesso imediato à plataforma, materiais e gerente dedicado.</p></div>
+      <div class="step"><div class="step-n">3</div><h4>CFI — Capacitação</h4><p>Treinamento completo pela Universidade Confrapag. Presencial ou online, gratuito.</p></div>
+      <div class="step"><div class="step-n">4</div><h4>Primeiros clientes</h4><p>Com suporte do gerente, você fecha os primeiros contratos e gera receita.</p></div>
+      <div class="step"><div class="step-n">5</div><h4>Escala contínua</h4><p>Expansão de carteira, novos produtos, Club 714, evolução para White Label.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA FINAL ══════════════════════════════════════ -->
+<section class="cta-final">
+  <div class="container">
+    <h2>O mercado de pagamentos não espera.<br>Você vai entrar por qual porta?</h2>
+    <p>Mais de 500 empreendedores já escolheram a Confrapag. A sua vaga na rede está aberta.</p>
+    <div class="cta-btns">
+      <a class="btn btn-grad" href="#">Quero ser Licenciado</a>
+      <a class="btn btn-ghost" href="#">Quero minha própria marca (WL)</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer>
+  <div style="margin-bottom:16px">
+    <svg width="98" height="32" viewBox="0 0 98 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:28px;width:auto;opacity:.6;margin:0 auto">
+      <path d="M18.8625 6.17272C19.4446 5.59062 19.4446 4.64568 18.8625 4.06247L15.2374 0.437403C14.958 0.158039 14.5785 0 14.1823 0C13.786 0 13.4076 0.156926 13.1271 0.437403L0.512344 13.0522C0.23298 13.3316 0.0749308 13.7111 0.0749308 14.1073C0.0749308 14.5036 0.231867 14.882 0.512344 15.1625L4.01274 18.6629L0.467821 22.0097C-0.130975 22.5751 -0.158799 23.52 0.406607 24.1188L7.40518 31.5325C7.69902 31.843 8.09413 32 8.49036 32C8.85765 32 9.22606 31.8653 9.51432 31.5926L13.0682 28.2369C13.3553 27.9654 13.5234 27.5903 13.5356 27.1951C13.5467 26.8 13.4009 26.4161 13.1294 26.1278L6.22094 18.8109C6.22873 18.8031 6.23875 18.7964 6.24654 18.7875L18.8613 6.17272H18.8625ZM14.1823 1.49253L17.8073 5.11759L5.19253 17.7324L1.56747 14.1073L14.1823 1.49253ZM8.49259 30.5063L1.49401 23.0926L5.04784 19.7369L12.0464 27.1506L8.49259 30.5063Z" fill="url(#lg_footer)"/>
+      <path d="M21.5803 23.2592C20.8991 22.8786 20.366 22.3499 19.9787 21.6754C19.5914 21.0009 19.3977 20.2296 19.3977 19.3604C19.3977 18.4911 19.5914 17.7354 19.9787 17.0542C20.366 16.3742 20.9003 15.8455 21.5803 15.4704C22.2604 15.0953 23.0294 14.9072 23.8865 14.9072C24.6845 14.9072 25.359 15.0475 25.911 15.3302C26.4619 15.6118 26.9027 15.9813 27.231 16.4387L25.8053 17.7587C25.606 17.466 25.3501 17.2367 25.0395 17.072C24.729 16.9073 24.3795 16.826 23.9922 16.826C23.311 16.826 22.7512 17.0576 22.3116 17.5217C21.8719 17.9858 21.6515 18.598 21.6515 19.3615C21.6515 20.125 21.8686 20.7372 22.3026 21.2013C22.7367 21.6654 23.2999 21.8969 23.9922 21.8969C24.3795 21.8969 24.7257 21.8145 25.0306 21.6509C25.3356 21.4862 25.5938 21.258 25.8053 20.9642L27.231 22.302C26.9027 22.7483 26.4597 23.1145 25.9021 23.4017C25.3445 23.6888 24.6722 23.8324 23.8865 23.8324C23.0294 23.8324 22.2615 23.6421 21.5803 23.2603V23.2592Z" fill="rgba(255,255,255,.5)"/>
+      <defs>
+        <linearGradient id="lg_footer" x1="0" y1="16" x2="19.3" y2="16" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#15F35B"/>
+          <stop offset="1" stop-color="#1599FF"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <p>Rua Aguaçu, 171, Bloco D · Alphaville · Campinas/SP · CEP 13098-321</p>
+  <p>© 2026 Confrapag. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>
