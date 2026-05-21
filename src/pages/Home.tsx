@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const base = import.meta.env.BASE_URL;
+const PAGES_BASE = 'https://paulolemes-cmd.github.io/confrapag-redesign';
 
 const cards = [
   {
@@ -10,13 +10,13 @@ const cards = [
     sub: 'Visualização interativa do modelo de negócio — D3.js',
   },
   {
-    to: `${base}prototipo-v1.html`,
+    to: `${PAGES_BASE}/prototipo-v1.html`,
     internal: false,
     title: 'Protótipo V1 — Versão inicial',
     sub: 'confrapag-redesign-prototype.html',
   },
   {
-    to: `${base}prototipo-v2.html`,
+    to: `${PAGES_BASE}/prototipo-v2.html`,
     internal: false,
     title: 'Protótipo V2 — Versão refinada',
     sub: 'Confrapag_Site_Redesign_Prototipo.html',
@@ -51,8 +51,6 @@ export default function Home() {
           <a
             key={c.to}
             href={c.to}
-            target="_blank"
-            rel="noreferrer"
             style={cardStyle}
             onMouseEnter={e => applyHover(e, true)}
             onMouseLeave={e => applyHover(e, false)}
