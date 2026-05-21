@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+const base = import.meta.env.BASE_URL;
+
 const cards = [
   {
     to: '/mandala',
@@ -8,13 +10,13 @@ const cards = [
     sub: 'Visualização interativa do modelo de negócio — D3.js',
   },
   {
-    to: '/prototipo-v1.html',
+    to: `${base}prototipo-v1.html`,
     internal: false,
     title: 'Protótipo V1 — Versão inicial',
     sub: 'confrapag-redesign-prototype.html',
   },
   {
-    to: '/prototipo-v2.html',
+    to: `${base}prototipo-v2.html`,
     internal: false,
     title: 'Protótipo V2 — Versão refinada',
     sub: 'Confrapag_Site_Redesign_Prototipo.html',
