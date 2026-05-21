@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confrapag — Ecossistema de Pagamentos</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(160deg,#EEF2FF 0%,#F5F8FF 50%,#EAF9F8 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 48px}
+.page-title{font-size:21px;font-weight:900;color:#10104F;text-align:center;margin-bottom:5px;letter-spacing:-.4px;line-height:1.2}
+.page-sub{font-size:13px;color:#7788AA;text-align:center;margin-bottom:20px;font-weight:500}
+#chart{width:100%;max-width:960px}
+.seg{cursor:pointer}
+.seg path{transition:filter .18s,opacity .18s}
+.seg path:hover{filter:brightness(1.12);opacity:.9}
+#tip{position:fixed;display:none;background:#0D1240;color:#fff;border-radius:12px;padding:15px 18px;max-width:290px;font-size:13px;line-height:1.6;z-index:999;box-shadow:0 12px 40px rgba(0,0,0,.28);pointer-events:none;border:1px solid rgba(255,255,255,.08)}
+#tip .tip-name{font-size:15px;font-weight:800;color:#11EF61;margin-bottom:6px;line-height:1.25}
+#tip .tip-ring{font-size:10px;font-weight:700;letter-spacing:.8px;color:#17BFB9;text-transform:uppercase;margin-bottom:8px}
+#tip .tip-desc{font-size:12.5px;color:#D0D8F0;line-height:1.55}
+.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.leg{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#445}
+.leg-sq{width:13px;height:13px;border-radius:3px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="page-title">O Ecossistema do Maior Canal Independente de Meios de Pagamentos do Brasil</div>
+<div class="page-sub">Passe o mouse sobre cada segmento para ver a descrição completa · Confrapag · 2026</div>
+
+<div id="chart"></div>
+<div id="tip"><div class="tip-name" id="tip-name"></div><div class="tip-ring" id="tip-ring"></div><div class="tip-desc" id="tip-desc"></div></div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-sq" style="background:#10104F"></div>Plataformas Proprietárias</div>
+  <div class="leg"><div class="leg-sq" style="background:#1AAE5C"></div>Infraestrutura Tecnológica</div>
+  <div class="leg"><div class="leg-sq" style="background:#0FA89E"></div>Operações do Canal</div>
+  <div class="leg"><div class="leg-sq" style="background:#1080CC"></div>Estratégia de Crescimento</div>
+  <div class="leg"><div class="leg-sq" style="background:#0B3D8A"></div>Comunidade & Educação</div>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────
+const RINGS = [
+  {
+    label:"Plataformas\nProprietárias",
+    iR:80, oR:152, gap:5,
+    colors:["#10104F","#192878","#10104F","#192878","#10104F"],
+    tColor:"#11EF61", fontSize:9, fontWeight:"800",
+    segs:[
+      {name:"ConfraHub",    desc:"Hub central de gestão unificada de licenciados e White Labels, integrando todas as ferramentas da plataforma em um único ambiente."},
+      {name:"ConfraSystem", desc:"Sistema de backoffice com gestão operacional completa: cadastros, relatórios, conciliação e controle total de ECs e terminais."},
+      {name:"ConfraSplit",  desc:"Motor proprietário de split de pagamentos com liquidação automática e precisa entre múltiplos recebedores — base do modelo de subadquirência."},
+      {name:"ConfraPix",    desc:"Solução completa de PIX integrada: cash-in, cash-out e pagamentos digitais conectados à infraestrutura WeQi e ao BACEN."},
+      {name:"Pulse",        desc:"Portal 360° do licenciado: metas, comissões, performance de terminais, campanhas e visão completa do negócio em tempo real."},
+    ]
+  },
+  {
+    label:"Infraestrutura\nTecnológica",
+    iR:157, oR:238, gap:5,
+    colors:["#1AAE5C","#12923E","#1AAE5C","#12923E"],
+    tColor:"#fff", fontSize:10, fontWeight:"700",
+    segs:[
+      {name:"WeQi",                 desc:"Parceiro tecnológico exclusivo. Infraestrutura 100% em nuvem (AWS + Cloudflare) para captura, processamento e liquidação — sem estrutura física."},
+      {name:"Adquirência\nMulti-Bandeira", desc:"Múltiplos adquirentes e bandeiras homologadas (ADIQ, Celcoin). API única com ISO 8583, EMV, Dual Message e Single Message para todos os terminais."},
+      {name:"BaaS · Celcoin",       desc:"Banking as a Service via Celcoin: contas digitais, PIX, emissão de cartões e produtos financeiros embarcados. Celcoin homologada na Núclea como Instituição de Domicílio, Emissora e Liquidante."},
+      {name:"Subadquirência",       desc:"Infraestrutura completa para subadquirentes com split de recebíveis implantado, dupla portabilidade multi-fornecedor e canal proprietário de vendas."},
+    ]
+  },
+  {
+    label:"Operações\ndo Canal",
+    iR:243, oR:320, gap:5,
+    colors:["#0FA89E","#0C887F","#0FA89E","#0C887F"],
+    tColor:"#fff", fontSize:10, fontWeight:"700",
+    segs:[
+      {name:"BackOffice\nUnificado",     desc:"Central de operações com gestão de chamados, suporte técnico e operacional integrado para todo o canal — um único ponto de contato para LAs e WLs."},
+      {name:"Logística\nCentralizada",   desc:"Gestão centralizada de terminais POS em todo o Brasil: manutenção, troca, suprimentos (chips), desassociação e logística reversa."},
+      {name:"Tecnologia\n& Suporte WeQi",desc:"API de transação e conciliação assertiva: dados direto do terminal conciliados com a liquidação. Resolução de problemas em todos os modelos de terminais."},
+      {name:"Comercial\nPróximo",        desc:"Time dedicado de relacionamento com licenciados e WLs: blindagem comercial, prevenção à descredenciamento e inteligência de vendas por carteira."},
+    ]
+  },
+  {
+    label:"Estratégia\nde Crescimento",
+    iR:325, oR:398, gap:5,
+    colors:["#1080CC","#0C63A3","#1080CC","#0C63A3"],
+    tColor:"#fff", fontSize:10, fontWeight:"700",
+    segs:[
+      {name:"Controladoria\n& Financeiro", desc:"Controladoria e financeiro unificados: tarifas, comissões, repasses e inteligência financeira em único banco de dados — informações estratégicas para toda a marca."},
+      {name:"Marketing\nEstratégico",      desc:"Campanhas padronizadas, geração de leads contínua, apresentações semanais do modelo e distribuição de oportunidades comerciais para toda a rede."},
+      {name:"Plano de\nCarreira",          desc:"Estrutura de evolução dos licenciados dentro do ecossistema Confrapag: metas, reconhecimento e trilha de crescimento profissional e financeiro."},
+      {name:"Expansão\nValidada",          desc:"Modelo de expansão testado: onboarding de ECs e LAs com KYC unificado e ativação comercial acelerada — independência completa no canal, sem descredenciamento abrupto."},
+    ]
+  },
+  {
+    label:"Comunidade\n& Educação",
+    iR:403, oR:492, gap:4,
+    colors:["#0B3D8A","#092F6B","#0B3D8A","#092F6B","#0B3D8A","#092F6B","#0B3D8A"],
+    tColor:"#11EF61", fontSize:9, fontWeight:"700",
+    segs:[
+      {name:"Universidade\nConfrapag",  desc:"Transferência de know-how escalável com conteúdos dinâmicos, cursos e capacitação completa distribuída em todo o Brasil — tudo que o licenciado precisa para crescer."},
+      {name:"Convenção\nAnual",         desc:"Maior evento do canal: reconhecimento dos melhores licenciados, estratégia, networking e lançamentos para toda a rede associada."},
+      {name:"Confra+",                  desc:"Programa de benefícios e vantagens exclusivas para licenciados Confrapag de alto desempenho."},
+      {name:"Paulo Por Aí",             desc:"Presença do CEO em visitas regionais por todo o Brasil, fortalecendo a cultura e o relacionamento direto com cada licenciado."},
+      {name:"Regionais",                desc:"Eventos regionais de conexão, capacitação e alinhamento estratégico distribuídos pelo Brasil — proximidade com a rede local."},
+      {name:"Comunicados",              desc:"Canal oficial de comunicação com a rede: atualizações regulatórias, avisos comerciais e novidades em tempo real."},
+      {name:"Lives\nSemanais",          desc:"Lives semanais com conteúdo estratégico, apresentação de produtos, cases de sucesso e atualização contínua para toda a rede."},
+    ]
+  },
+];
+
+// ── SVG ───────────────────────────────────────────────────────
+const W = 960, H = 960, CX = W/2, CY = H/2;
+const svg = d3.select("#chart").append("svg")
+  .attr("viewBox",`0 0 ${W} ${H}`)
+  .attr("width","100%")
+  .style("max-height","92vh");
+
+// Background glow circle
+const defs = svg.append("defs");
+const bgGrad = defs.append("radialGradient").attr("id","bgg");
+bgGrad.append("stop").attr("offset","0%").attr("stop-color","#D8E4FF").attr("stop-opacity","0.6");
+bgGrad.append("stop").attr("offset","100%").attr("stop-color","#F0F4FF").attr("stop-opacity","0");
+svg.append("circle").attr("cx",CX).attr("cy",CY).attr("r",510)
+  .attr("fill","url(#bgg)");
+
+const G = svg.append("g").attr("transform",`translate(${CX},${CY})`);
+
+// ── Tooltip logic ─────────────────────────────────────────────
+const tip = document.getElementById("tip");
+const tipName = document.getElementById("tip-name");
+const tipRing = document.getElementById("tip-ring");
+const tipDesc = document.getElementById("tip-desc");
+
+function showTip(evt, seg, ringLabel){
+  tipName.textContent = seg.name.replace(/\n/g," ");
+  tipRing.textContent = ringLabel.replace(/\n/g," ");
+  tipDesc.textContent = seg.desc;
+  tip.style.display = "block";
+  positionTip(evt);
+}
+function positionTip(evt){
+  const x = evt.clientX + 18, y = evt.clientY - 12;
+  const tipW = 308;
+  tip.style.left = (x + tipW > window.innerWidth ? x - tipW - 36 : x) + "px";
+  tip.style.top  = Math.max(8, y) + "px";
+}
+function hideTip(){ tip.style.display="none"; }
+svg.on("mousemove", evt => { if(tip.style.display==="block") positionTip(evt); });
+
+// ── Draw each ring ────────────────────────────────────────────
+RINGS.forEach((ring, ri) => {
+  const pie = d3.pie().value(1).padAngle(0.028).sort(null)(ring.segs);
+  const arc = d3.arc().innerRadius(ring.iR).outerRadius(ring.oR).cornerRadius(5);
+  const rg = G.append("g");
+
+  // paths
+  pie.forEach((d,i) => {
+    rg.append("g").attr("class","seg")
+      .append("path")
+      .attr("d", arc(d))
+      .attr("fill", ring.colors[i % ring.colors.length])
+      .attr("stroke","rgba(240,244,255,0.7)")
+      .attr("stroke-width",1.5)
+      .style("filter","drop-shadow(0 2px 8px rgba(0,0,0,0.12))")
+      .on("mousemove", evt => showTip(evt, d.data, ring.label))
+      .on("mouseleave", hideTip);
+  });
+
+  // segment labels (radial text)
+  const midR = (ring.iR + ring.oR) / 2;
+  const lh = ring.fontSize + 2;
+
+  pie.forEach((d,i) => {
+    const mid = (d.startAngle + d.endAngle) / 2;
+    // Centroid position
+    const [bx,by] = arc.centroid(d);
+    // Rotation: text reads from center outward
+    const rotateDeg = (mid * 180 / Math.PI) - 90;
+    const flip = mid > Math.PI ? 180 : 0;
+    const finalRot = rotateDeg + flip;
+
+    const tg = G.append("g")
+      .attr("transform",`translate(${bx},${by}) rotate(${finalRot})`)
+      .attr("pointer-events","none");
+
+    const lines = d.data.name.split("\n");
+    const totalH = (lines.length - 1) * lh;
+
+    lines.forEach((line,li) => {
+      tg.append("text")
+        .attr("x", 0)
+        .attr("y", -totalH/2 + li*lh)
+        .attr("text-anchor","middle")
+        .attr("dominant-baseline","middle")
+        .attr("fill", ring.tColor)
+        .attr("font-size", ring.fontSize)
+        .attr("font-weight", ring.fontWeight)
+        .attr("font-family","Inter,sans-serif")
+        .attr("letter-spacing","0.2px")
+        .text(line);
+    });
+  });
+
+  // outer arc label for ring (category name, curved on the outer edge)
+  // Draw as two horizontal badge at 270° (top)
+  // Actually just skip outer labels — tooltip + legend is enough
+});
+
+// ── Separator rings (white lines between layers) ──────────────
+RINGS.forEach(r => {
+  G.append("circle").attr("r", r.iR - 2)
+    .attr("fill","none").attr("stroke","rgba(240,244,255,0.9)").attr("stroke-width",5);
+  G.append("circle").attr("r", r.oR + 2)
+    .attr("fill","none").attr("stroke","rgba(240,244,255,0.9)").attr("stroke-width",5);
+});
+
+// ── Center ────────────────────────────────────────────────────
+const cR = 78;
+
+// Center gradient
+const cGrad = defs.append("radialGradient").attr("id","cg").attr("cx","38%").attr("cy","32%");
+cGrad.append("stop").attr("offset","0%").attr("stop-color","#2235A8");
+cGrad.append("stop").attr("offset","100%").attr("stop-color","#0A0E3F");
+
+G.append("circle").attr("r", cR + 6)
+  .attr("fill","rgba(17,239,97,0.12)")
+  .style("filter","blur(6px)");
+
+G.append("circle").attr("r", cR)
+  .attr("fill","url(#cg)")
+  .attr("stroke","#11EF61")
+  .attr("stroke-width","1.5")
+  .style("filter","drop-shadow(0 4px 20px rgba(16,16,79,0.45))");
+
+// Inner dashed circle
+G.append("circle").attr("r", cR - 12)
+  .attr("fill","none")
+  .attr("stroke","rgba(17,239,97,0.35)")
+  .attr("stroke-width","1")
+  .attr("stroke-dasharray","4,4");
+
+// Text
+const centerLines = [
+  {text:"CONFRAPAG", y:-20, size:13, weight:"900", color:"#11EF61", spacing:"2px"},
+  {text:"Ecossistema de",  y: -3, size:8.5, weight:"500", color:"rgba(255,255,255,0.75)", spacing:"0.3px"},
+  {text:"Meios de Pagamentos", y:9, size:8.5, weight:"500", color:"rgba(255,255,255,0.75)", spacing:"0.3px"},
+  {text:"Brasil", y:28, size:9, weight:"700", color:"#17BFB9", spacing:"1px"},
+];
+centerLines.forEach(l=>{
+  G.append("text")
+    .attr("x",0).attr("y",l.y)
+    .attr("text-anchor","middle").attr("dominant-baseline","middle")
+    .attr("fill",l.color)
+    .attr("font-size",l.size)
+    .attr("font-weight",l.weight)
+    .attr("font-family","Inter,sans-serif")
+    .attr("letter-spacing",l.spacing)
+    .text(l.text);
+});
+
+// ── Ring label badges (subtle arc markers at 12 o'clock) ──────
+const badgeAngles = [-90, -90, -90, -90, -90]; // degrees — top of each ring
+RINGS.forEach((ring,ri) => {
+  const midR = (ring.iR + ring.oR) / 2;
+  const label = ring.label.replace(/\n/g," ");
+  const badgeY = -midR;
+
+  // small pill badge at top of each ring
+  const bw = label.length * 4.8 + 12;
+  const bh = 13;
+  G.append("rect")
+    .attr("x",-bw/2).attr("y",badgeY - bh/2)
+    .attr("width",bw).attr("height",bh)
+    .attr("rx",6).attr("ry",6)
+    .attr("fill","rgba(240,244,255,0.88)")
+    .attr("stroke","rgba(200,210,240,0.7)")
+    .attr("stroke-width","1")
+    .attr("pointer-events","none");
+
+  G.append("text")
+    .attr("x",0).attr("y",badgeY)
+    .attr("text-anchor","middle").attr("dominant-baseline","middle")
+    .attr("fill","#10104F")
+    .attr("font-size","7")
+    .attr("font-weight","800")
+    .attr("font-family","Inter,sans-serif")
+    .attr("letter-spacing","0.8px")
+    .attr("pointer-events","none")
+    .text(label.toUpperCase());
+});
+
+// ── Entrance animation ────────────────────────────────────────
+G.style("opacity",0).style("transform-origin","center center").style("transform","scale(0.88)")
+  .transition().duration(900).ease(d3.easeCubicOut)
+  .style("opacity",1).style("transform","scale(1)");
+</script>
+</body>
+</html>
