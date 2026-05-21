@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confrapag — Protótipo Redesign 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===================== DESIGN TOKENS — BRAND FIEL ===================== */
+:root {
+  /* Cores extraídas do site e SVGs originais da Confrapag */
+  --dark:       #000811;   /* fundo escuro primário */
+  --navy:       #10104F;   /* azul marinho — cor principal da marca */
+  --navy-mid:   #1A1A6E;   /* variação intermediária */
+  --green:      #15F35B;   /* verde gradiente — início */
+  --blue:       #1599FF;   /* azul gradiente — fim */
+  --white:      #FAFAFA;   /* branco off-white */
+  --gray-lt:    #F0F2F8;   /* fundo seção clara */
+  --gray:       #6B7280;
+  --border:     rgba(255,255,255,0.08);
+  --border-lt:  #E5E7EB;
+
+  /* Gradiente da marca */
+  --grad:       linear-gradient(135deg, #15F35B 0%, #1599FF 100%);
+  --grad-rev:   linear-gradient(135deg, #1599FF 0%, #15F35B 100%);
+  --grad-soft:  linear-gradient(135deg, rgba(21,243,91,.15) 0%, rgba(21,153,255,.15) 100%);
+
+  --shadow:     0 4px 24px rgba(0,8,17,0.18);
+  --shadow-lg:  0 12px 48px rgba(0,8,17,0.28);
+  --radius:     12px;
+  --radius-lg:  20px;
+  --font:       'Poppins', system-ui, -apple-system, sans-serif;
+}
+
+/* ===================== RESET ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--navy); background: var(--white); line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+
+/* ===================== UTILITÁRIOS ===================== */
+.container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+/* Texto gradiente marca */
+.text-grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+.badge-grad { background: var(--grad-soft); color: var(--navy); border: 1px solid rgba(21,153,255,.2); }
+.badge-dark { background: rgba(255,255,255,.08); color: var(--white); border: 1px solid rgba(255,255,255,.12); }
+.badge-green { background: rgba(21,243,91,.12); color: #0FA84A; border: 1px solid rgba(21,243,91,.25); }
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 28px; border-radius: 999px;
+  font-size: 15px; font-weight: 700; font-family: var(--font);
+  cursor: pointer; border: none; transition: all .22s; letter-spacing: -.01em;
+}
+.btn-grad {
+  background: var(--grad);
+  color: var(--dark);
+}
+.btn-grad:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(21,243,91,.35); }
+
+.btn-outline-white {
+  background: transparent; color: var(--white);
+  border: 2px solid rgba(255,255,255,.35);
+}
+.btn-outline-white:hover { background: rgba(255,255,255,.08); border-color: var(--white); }
+
+.btn-outline-dark {
+  background: transparent; color: var(--navy);
+  border: 2px solid var(--navy);
+}
+.btn-outline-dark:hover { background: var(--navy); color: var(--white); }
+
+.btn-dark { background: var(--navy); color: var(--white); }
+.btn-dark:hover { background: var(--navy-mid); transform: translateY(-2px); }
+
+.btn-lg { padding: 18px 40px; font-size: 16px; }
+.btn-sm { padding: 10px 20px; font-size: 13px; }
+
+/* Seções */
+.section { padding: 96px 0; }
+.section-sm { padding: 64px 0; }
+.section-title { font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -.03em; margin-bottom: 16px; }
+.section-sub { font-size: 17px; color: var(--gray); line-height: 1.75; max-width: 620px; margin-bottom: 48px; }
+.text-center { text-align: center; }
+.text-center .section-sub { margin-left: auto; margin-right: auto; }
+.on-dark { color: var(--white); }
+.on-dark .section-sub { color: rgba(255,255,255,.6); }
+
+/* ===================== LOGO MARK (fiel ao SVG original) ===================== */
+.logo-mark {
+  width: 36px; height: 36px; position: relative;
+}
+.logo-mark svg { width: 36px; height: 36px; }
+
+/* ===================== HEADER ===================== */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(0,8,17,.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+.logo-full { display: flex; align-items: center; gap: 10px; }
+.logo-svg-wrap { height: 30px; }
+.logo-svg-wrap img { height: 30px; width: auto; }
+/* Fallback logo caso imagem não carregue */
+.logo-fallback { display: flex; align-items: center; gap: 10px; }
+.logo-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--grad); display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 900; color: var(--dark); letter-spacing: -1px;
+}
+.logo-name { font-size: 20px; font-weight: 800; color: var(--white); letter-spacing: -.04em; }
+
+nav { display: flex; align-items: center; gap: 2px; }
+nav a {
+  padding: 8px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,.65);
+  transition: all .15s;
+}
+nav a:hover { color: var(--white); background: rgba(255,255,255,.06); }
+.header-ctas { display: flex; gap: 10px; align-items: center; }
+
+/* ===================== HERO ===================== */
+.hero {
+  background: var(--dark);
+  padding: 104px 0 88px;
+  position: relative; overflow: hidden;
+}
+/* Glow de fundo — marca confrapag */
+.hero::before {
+  content: ''; position: absolute;
+  top: -200px; left: -100px;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(21,243,91,.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute;
+  bottom: -200px; right: -100px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(21,153,255,.10) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; position: relative; z-index: 1; }
+
+.hero-eyebrow { font-size: 12px; font-weight: 700; color: var(--green); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 22px; display: flex; align-items: center; gap: 8px; }
+.hero-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--green); }
+
+.hero h1 { font-size: 54px; font-weight: 900; color: var(--white); line-height: 1.08; letter-spacing: -.04em; margin-bottom: 24px; }
+
+.hero-desc { font-size: 18px; color: rgba(255,255,255,.6); line-height: 1.75; margin-bottom: 40px; }
+
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+
+.hero-stats { display: flex; gap: 36px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,.08); }
+.hero-stat strong { display: block; font-size: 28px; font-weight: 900; color: var(--white); letter-spacing: -.04em; }
+.hero-stat strong span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-stat p { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+/* Card hero direita */
+.hero-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-lg);
+  padding: 8px; overflow: hidden;
+}
+.hero-card-label {
+  font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35);
+  text-transform: uppercase; letter-spacing: .1em;
+  padding: 16px 20px 12px;
+}
+.path-btn {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px; border-radius: var(--radius); margin-bottom: 8px;
+  cursor: pointer; transition: all .2s; border: 1px solid transparent;
+}
+.path-btn:hover { transform: translateX(4px); }
+.path-btn.green { background: rgba(21,243,91,.07); border-color: rgba(21,243,91,.18); }
+.path-btn.blue-p { background: rgba(21,153,255,.07); border-color: rgba(21,153,255,.18); }
+.path-btn-icon {
+  width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.path-btn.green .path-btn-icon { background: rgba(21,243,91,.15); }
+.path-btn.blue-p .path-btn-icon { background: rgba(21,153,255,.15); }
+.path-btn-info { flex: 1; }
+.path-btn-info strong { display: block; font-size: 15px; font-weight: 800; color: var(--white); margin-bottom: 5px; }
+.path-btn-info p { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.55; }
+.path-btn-arrow { font-size: 18px; color: rgba(255,255,255,.25); align-self: center; flex-shrink: 0; }
+
+.hero-card-divider { height: 1px; background: rgba(255,255,255,.06); margin: 8px 0; }
+.hero-card-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+}
+.hero-card-cta span { font-size: 13px; color: rgba(255,255,255,.4); }
+
+/* ===================== STATS BAR ===================== */
+.statsbar { background: var(--navy); border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06); }
+.statsbar-inner { display: grid; grid-template-columns: repeat(4, 1fr); }
+.stat-col { padding: 28px 32px; border-right: 1px solid rgba(255,255,255,.08); text-align: center; }
+.stat-col:last-child { border-right: none; }
+.stat-col strong { display: block; font-size: 34px; font-weight: 900; letter-spacing: -.04em; line-height: 1; margin-bottom: 6px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-col span { font-size: 13px; color: rgba(255,255,255,.5); }
+
+/* ===================== DOIS MODELOS ===================== */
+.models-section { background: var(--gray-lt); }
+.models-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.model-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--border-lt); }
+.model-head { padding: 40px 40px 32px; background: var(--dark); position: relative; overflow: hidden; }
+.model-head::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 200px; height: 200px; border-radius: 50%;
+  pointer-events: none;
+}
+.model-card.g .model-head::before { background: radial-gradient(circle, rgba(21,243,91,.15) 0%, transparent 70%); }
+.model-card.b .model-head::before { background: radial-gradient(circle, rgba(21,153,255,.15) 0%, transparent 70%); }
+
+.model-icon { font-size: 38px; margin-bottom: 18px; }
+.model-head h3 { font-size: 26px; font-weight: 900; color: var(--white); letter-spacing: -.04em; margin-bottom: 10px; }
+.model-head p { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.65; }
+
+.model-body { padding: 36px 40px; }
+.model-list { list-style: none; margin-bottom: 28px; }
+.model-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid var(--border-lt);
+  font-size: 14px; color: #374151;
+}
+.model-list li:last-child { border: none; }
+.check-icon {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: var(--grad); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--dark); font-weight: 900;
+}
+.model-earn {
+  border-radius: var(--radius); padding: 20px 22px; margin-bottom: 26px;
+  background: var(--grad-soft); border: 1px solid rgba(21,153,255,.15);
+}
+.model-earn-lbl { font-size: 11px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+.model-earn-val { font-size: 30px; font-weight: 900; color: var(--navy); letter-spacing: -.04em; }
+.model-earn-note { font-size: 12px; color: var(--gray); margin-top: 4px; line-height: 1.5; }
+
+/* ===================== DORES ===================== */
+.pain-section { background: var(--dark); }
+.pain-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.pain-card {
+  border-radius: var(--radius); padding: 28px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  transition: all .2s;
+}
+.pain-card:hover { background: rgba(255,255,255,.05); border-color: rgba(21,243,91,.2); }
+.pain-card-q { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 14px; line-height: 1.5; }
+.pain-card-q::before { content: '"'; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 32px; line-height: 0; vertical-align: -12px; margin-right: 4px; }
+.pain-divider { height: 1px; background: rgba(255,255,255,.07); margin: 14px 0; }
+.pain-card-a { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.65; }
+.pain-card-a strong { color: var(--green); font-weight: 700; }
+
+/* ===================== GANHOS ===================== */
+.earn-section { background: var(--white); }
+.earn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.earn-card {
+  border-radius: var(--radius-lg); padding: 36px;
+  border: 1px solid var(--border-lt); text-align: center;
+  position: relative; transition: all .2s;
+}
+.earn-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-6px); }
+.earn-card.highlight { border: 2px solid transparent; background: linear-gradient(var(--white), var(--white)) padding-box, var(--grad) border-box; }
+.earn-card.highlight::before { content: 'MAIS POPULAR'; position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--grad); color: var(--dark); font-size: 10px; font-weight: 800; padding: 3px 14px; border-radius: 999px; white-space: nowrap; letter-spacing: .08em; }
+.earn-level { font-size: 11px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+.earn-type { font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 18px; letter-spacing: -.02em; }
+.earn-val { font-size: 40px; font-weight: 900; letter-spacing: -.04em; margin-bottom: 6px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.earn-period { font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+.earn-items { list-style: none; text-align: left; }
+.earn-items li { font-size: 13px; color: var(--gray); padding: 7px 0; border-bottom: 1px solid var(--border-lt); display: flex; align-items: center; gap: 8px; }
+.earn-items li::before { content: '→'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+.earn-items li:last-child { border: none; }
+.earn-disclaimer { text-align: center; font-size: 12px; color: var(--gray); margin-top: 32px; background: var(--gray-lt); padding: 16px 20px; border-radius: var(--radius); line-height: 1.6; }
+
+/* ===================== JORNADA ===================== */
+.journey-section { background: var(--navy); }
+.journey-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; margin-top: 8px; }
+.journey-steps::before { content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 2px; background: rgba(255,255,255,.06); z-index: 0; }
+.journey-step { text-align: center; position: relative; z-index: 1; padding: 0 10px; }
+.j-num {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--grad); display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 22px; font-weight: 900; color: var(--dark);
+  position: relative; z-index: 1;
+  box-shadow: 0 0 0 6px rgba(21,153,255,.12);
+}
+.journey-step h4 { font-size: 13px; font-weight: 800; color: var(--white); margin-bottom: 8px; letter-spacing: -.01em; }
+.journey-step p { font-size: 12px; color: rgba(255,255,255,.45); line-height: 1.55; }
+.journey-sla { display: inline-flex; align-items: center; gap: 10px; margin-top: 48px; padding: 16px 28px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 999px; }
+.journey-sla span { font-size: 14px; color: rgba(255,255,255,.5); }
+.journey-sla strong { font-size: 14px; font-weight: 800; color: var(--green); }
+
+/* ===================== COMPARATIVO ===================== */
+.diff-section { background: var(--gray-lt); }
+.diff-table-wrap { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--border-lt); }
+.diff-table { width: 100%; border-collapse: collapse; }
+.diff-table th, .diff-table td { padding: 16px 22px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--border-lt); }
+.diff-table thead tr { background: var(--dark); }
+.diff-table thead th { color: rgba(255,255,255,.5); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.diff-table thead th.hl { background: var(--navy); }
+.diff-table thead th.hl-label { color: var(--green); font-weight: 800; }
+.diff-table tbody tr:nth-child(even) { background: rgba(0,0,0,.02); }
+.diff-table tbody tr:hover { background: rgba(21,153,255,.04); }
+.diff-table tbody td:first-child { font-weight: 700; color: var(--navy); }
+.diff-table tbody td { color: var(--gray); }
+.diff-table tbody td.hl { background: rgba(21,243,91,.05); font-weight: 700; color: var(--navy); }
+.check-y { color: var(--green); font-size: 17px; font-weight: 900; }
+.check-n { color: #D1D5DB; font-size: 17px; }
+
+/* ===================== CASOS REAIS ===================== */
+.stories-section { background: var(--dark); }
+.stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.story-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius-lg); padding: 32px; transition: all .2s; }
+.story-card:hover { border-color: rgba(21,243,91,.25); background: rgba(255,255,255,.06); }
+.story-tags { display: flex; gap: 10px; margin-bottom: 22px; }
+.story-tag { flex: 1; border-radius: 8px; padding: 10px 12px; }
+.story-tag.before { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+.story-tag.after { background: rgba(21,243,91,.08); border: 1px solid rgba(21,243,91,.2); }
+.story-tag-l { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+.story-tag.before .story-tag-l { color: rgba(255,255,255,.35); }
+.story-tag.after  .story-tag-l { color: var(--green); }
+.story-tag-v { font-size: 13px; font-weight: 700; color: var(--white); }
+.story-q { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.7; font-style: italic; margin-bottom: 20px; padding-left: 14px; border-left: 2px solid var(--green); }
+.story-person { display: flex; align-items: center; gap: 12px; }
+.story-av { width: 42px; height: 42px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; color: var(--dark); font-size: 16px; font-weight: 900; flex-shrink: 0; }
+.story-person strong { display: block; font-size: 14px; font-weight: 700; color: var(--white); }
+.story-person span { font-size: 12px; color: rgba(255,255,255,.4); }
+.story-result { margin-top: 20px; background: rgba(21,243,91,.07); border: 1px solid rgba(21,243,91,.15); border-radius: var(--radius); padding: 14px 16px; }
+.story-result-l { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+.story-result-v { font-size: 24px; font-weight: 900; color: var(--white); letter-spacing: -.03em; }
+
+/* ===================== SOLUÇÕES ===================== */
+.sol-section { background: var(--white); }
+.sol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.sol-card { border: 1px solid var(--border-lt); border-radius: var(--radius); padding: 28px; transition: all .2s; }
+.sol-card:hover { box-shadow: var(--shadow); border-color: transparent; background: var(--grad-soft); transform: translateY(-4px); }
+.sol-icon { font-size: 30px; margin-bottom: 14px; }
+.sol-card h4 { font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 8px; letter-spacing: -.02em; }
+.sol-card p { font-size: 13px; color: var(--gray); line-height: 1.65; margin-bottom: 16px; }
+.sol-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: rgba(21,243,91,.1); color: #0D8C3E; border: 1px solid rgba(21,243,91,.2); padding: 4px 10px; border-radius: 6px; }
+.sol-tag-new { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: rgba(21,153,255,.1); color: #0077CC; border: 1px solid rgba(21,153,255,.2); padding: 4px 10px; border-radius: 6px; }
+.new-pill { display: inline-block; background: var(--grad); color: var(--dark); font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; margin-left: 6px; vertical-align: middle; letter-spacing: .04em; }
+
+/* ===================== UNIVERSIDADE ===================== */
+.univ-section { background: var(--navy); }
+.univ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.univ-list { list-style: none; }
+.univ-item { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+.univ-item:last-child { border: none; }
+.univ-ic { width: 46px; height: 46px; border-radius: 12px; background: var(--grad-soft); border: 1px solid rgba(21,153,255,.2); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.univ-item strong { display: block; font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.univ-item span { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.55; }
+.univ-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius-lg); padding: 32px; }
+.univ-card-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 20px; }
+.course-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06); border-radius: var(--radius); margin-bottom: 8px; transition: all .15s; }
+.course-row:hover { background: rgba(255,255,255,.07); }
+.course-ic { font-size: 20px; }
+.course-row strong { flex: 1; display: block; font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.course-row span { font-size: 11px; color: rgba(255,255,255,.4); display: block; }
+.course-free { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; background: rgba(21,243,91,.15); color: var(--green); border: 1px solid rgba(21,243,91,.25); white-space: nowrap; }
+
+/* ===================== OPERAÇÕES ===================== */
+.ops-section { background: var(--gray-lt); }
+.ops-context { background: var(--white); border: 1px solid var(--border-lt); border-left: 4px solid; border-image: var(--grad) 1; border-radius: var(--radius); padding: 22px 28px; margin-bottom: 40px; font-size: 15px; color: #374151; line-height: 1.7; }
+.ops-context strong { color: var(--navy); }
+.ops-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.op-card { background: var(--white); border: 1px solid var(--border-lt); border-radius: var(--radius); padding: 28px; text-align: center; box-shadow: var(--shadow); transition: all .2s; }
+.op-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; background: linear-gradient(var(--white), var(--white)) padding-box, var(--grad) border-box; border: 2px solid transparent; }
+.op-logo { width: 60px; height: 60px; border-radius: 14px; background: var(--grad-soft); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px; }
+.op-card h4 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; letter-spacing: -.02em; }
+.op-card p { font-size: 12px; color: var(--gray); line-height: 1.55; }
+.op-tpv { margin-top: 16px; font-size: 22px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -.03em; }
+.op-tpv-l { font-size: 11px; color: var(--gray); margin-top: 2px; }
+
+/* ===================== CTA FINAL ===================== */
+.cta-section {
+  padding: 104px 0; text-align: center;
+  background: var(--dark); position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(21,243,91,.06) 0%, rgba(21,153,255,.06) 50%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 { font-size: 48px; font-weight: 900; color: var(--white); letter-spacing: -.04em; line-height: 1.12; margin-bottom: 20px; position: relative; }
+.cta-section p { font-size: 18px; color: rgba(255,255,255,.55); margin-bottom: 48px; position: relative; }
+.cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+.cta-note { margin-top: 24px; font-size: 13px; color: rgba(255,255,255,.3); position: relative; }
+
+/* ===================== FOOTER ===================== */
+.footer { background: var(--dark); border-top: 1px solid rgba(255,255,255,.06); padding: 64px 0 32px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+.footer-brand-txt { font-size: 14px; color: rgba(255,255,255,.35); line-height: 1.7; margin-top: 16px; max-width: 260px; }
+.footer-addr { font-size: 12px; color: rgba(255,255,255,.25); margin-top: 12px; line-height: 1.6; }
+.footer-col h5 { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,.55); margin-bottom: 10px; transition: color .15s; }
+.footer-col a:hover { color: var(--green); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.25); }
+.socials { display: flex; gap: 10px; }
+.social { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.45); font-size: 14px; transition: all .15s; }
+.social:hover { background: var(--grad); color: var(--dark); border-color: transparent; }
+
+/* ===================== NOTA REDESIGN ===================== */
+.redesign-pill { position: fixed; bottom: 16px; right: 16px; background: var(--grad); color: var(--dark); padding: 10px 18px; border-radius: 999px; font-size: 12px; font-weight: 800; box-shadow: 0 4px 20px rgba(21,243,91,.4); z-index: 999; letter-spacing: .02em; }
+</style>
+</head>
+<body>
+
+<div class="redesign-pill">★ Protótipo Redesign — Referência para Figma</div>
+
+<!-- ======================== HEADER ======================== -->
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <!-- Logo fiel à marca original: gradiente verde→azul + texto escuro -->
+      <a href="#" class="logo-fallback">
+        <div class="logo-icon">CP</div>
+        <span class="logo-name">confrapag</span>
+      </a>
+      <nav>
+        <a href="#modelos">Licenciado</a>
+        <a href="#modelos">White Label</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#universidade">Universidade</a>
+        <a href="#diferenciais">Diferenciais</a>
+        <a href="#blog">Blog</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <div class="header-ctas">
+        <a href="#contato" class="btn btn-outline-white btn-sm">Falar com consultor</a>
+        <a href="#modelos" class="btn btn-grad btn-sm">Comece agora →</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======================== HERO ======================== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-eyebrow">O maior ecossistema de pagamentos para empreendedores</p>
+        <h1>Monte seu negócio de pagamentos.<br><span class="text-grad">Nós cuidamos de tudo o que é difícil.</span></h1>
+        <p class="hero-desc">Tecnologia, gestão financeira, jurídico, treinamento e marca — tudo incluso. Você entra no mercado de meios de pagamento sem construir nada do zero e começa a faturar em semanas.</p>
+        <div class="hero-ctas">
+          <a href="#modelos" class="btn btn-grad btn-lg">Quero ser Licenciado →</a>
+          <a href="#modelos" class="btn btn-outline-white btn-lg">Quero minha própria fintech</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong><span>700</span>+</strong>
+            <p>Licenciados ativos</p>
+          </div>
+          <div class="hero-stat">
+            <strong>R$<span>350</span>M</strong>
+            <p>TPV mensal da rede</p>
+          </div>
+          <div class="hero-stat">
+            <strong><span>68</span></strong>
+            <p>Operações White Label</p>
+          </div>
+          <div class="hero-stat">
+            <strong><span>≤30</span></strong>
+            <p>Dias ao primeiro cliente</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="hero-card">
+          <p class="hero-card-label">Escolha seu caminho →</p>
+
+          <div class="path-btn green">
+            <div class="path-btn-icon">🏪</div>
+            <div class="path-btn-info">
+              <strong>Licenciado Autorizado</strong>
+              <p>Use a estrutura e a marca Confrapag para distribuir soluções de pagamento com suporte completo.</p>
+            </div>
+            <div class="path-btn-arrow">→</div>
+          </div>
+
+          <div class="path-btn blue-p">
+            <div class="path-btn-icon">🏦</div>
+            <div class="path-btn-info">
+              <strong>White Label — Sua Fintech</strong>
+              <p>Lance sua própria marca de pagamentos usando toda a infraestrutura da Confrapag por baixo.</p>
+            </div>
+            <div class="path-btn-arrow">→</div>
+          </div>
+
+          <div class="hero-card-divider"></div>
+          <div class="hero-card-cta">
+            <span>Dúvida sobre qual caminho escolher?</span>
+            <a href="#" class="btn btn-grad btn-sm">Falar com consultor</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== STATS BAR ======================== -->
+<section class="statsbar">
+  <div class="container">
+    <div class="statsbar-inner">
+      <div class="stat-col">
+        <strong>R$ 350M+</strong>
+        <span>Volume transacionado por mês</span>
+      </div>
+      <div class="stat-col">
+        <strong>768+</strong>
+        <span>Empreendedores ativos na rede</span>
+      </div>
+      <div class="stat-col">
+        <strong>≤ 30 dias</strong>
+        <span>Do contrato ao primeiro cliente</span>
+      </div>
+      <div class="stat-col">
+        <strong>5 anos</strong>
+        <span>Construindo o ecossistema</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== DOIS MODELOS ======================== -->
+<section class="section models-section" id="modelos">
+  <div class="container">
+    <div class="text-center">
+      <span class="badge badge-grad">Dois modelos de negócio</span>
+      <h2 class="section-title" style="margin-top:16px; color:var(--navy);">Qual é o seu perfil de empreendedor?</h2>
+      <p class="section-sub">A Confrapag atende dois perfis muito diferentes. Entenda o seu caminho antes de dar o próximo passo.</p>
+    </div>
+    <div class="models-grid">
+
+      <!-- LICENCIADO -->
+      <div class="model-card g">
+        <div class="model-head">
+          <div class="model-icon">🏪</div>
+          <h3>Licenciado Autorizado</h3>
+          <p>Para o empreendedor que quer entrar no mercado de pagamentos com estrutura completa, marca consolidada e suporte de ponta a ponta — sem construir nada do zero.</p>
+        </div>
+        <div class="model-body">
+          <ul class="model-list">
+            <li><div class="check-icon">✓</div> Marca Confrapag com credibilidade imediata</li>
+            <li><div class="check-icon">✓</div> Tecnologia completa: PIX, TEF, Hub, Energia, Online</li>
+            <li><div class="check-icon">✓</div> Gestor comercial dedicado + metas realistas</li>
+            <li><div class="check-icon">✓</div> Treinamento gratuito (CFI) com certificação</li>
+            <li><div class="check-icon">✓</div> Suporte técnico, jurídico e financeiro incluso</li>
+            <li><div class="check-icon">✓</div> Universidade Confrapag + Club 714</li>
+          </ul>
+          <div class="model-earn">
+            <div class="model-earn-lbl">★ Potencial de faturamento mensal</div>
+            <div class="model-earn-val">R$ 5.000 – R$ 40.000</div>
+            <div class="model-earn-note">Baseado em licenciados ativos. Varia conforme volume de clientes e TPV gerado.</div>
+          </div>
+          <a href="#" class="btn btn-grad" style="width:100%;">Quero ser Licenciado →</a>
+        </div>
+      </div>
+
+      <!-- WHITE LABEL -->
+      <div class="model-card b">
+        <div class="model-head">
+          <div class="model-icon">🏦</div>
+          <h3>White Label — Sua Fintech</h3>
+          <p>Para quem quer criar sua própria marca de meios de pagamento. Você tem o nome e o relacionamento. Nós entregamos toda a infraestrutura por baixo.</p>
+        </div>
+        <div class="model-body">
+          <ul class="model-list">
+            <li><div class="check-icon">✓</div> Sua marca, sua identidade — do zero ao lançamento</li>
+            <li><div class="check-icon">✓</div> Tecnologia WeQi que processa R$ 350M/mês</li>
+            <li><div class="check-icon">✓</div> BaaS completo: conta digital, PIX, crédito, seguros</li>
+            <li><div class="check-icon">✓</div> Gestão financeira, controladoria e compliance inclusos</li>
+            <li><div class="check-icon">✓</div> Suporte na formação da sua rede de licenciados</li>
+            <li><div class="check-icon">✓</div> Escale sem preocupação com infraestrutura</li>
+          </ul>
+          <div class="model-earn">
+            <div class="model-earn-lbl">★ Potencial de receita mensal</div>
+            <div class="model-earn-val">R$ 50.000 – R$ 500.000+</div>
+            <div class="model-earn-note">Baseado nas operações WL ativas. Depende do TPV da sua marca e rede.</div>
+          </div>
+          <a href="#" class="btn btn-dark" style="width:100%;">Quero minha própria fintech →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== DORES ======================== -->
+<section class="section pain-section">
+  <div class="container">
+    <div class="text-center on-dark">
+      <span class="badge badge-dark">Você se reconhece aqui?</span>
+      <h2 class="section-title on-dark" style="margin-top:16px;">Problemas reais que a Confrapag resolve</h2>
+      <p class="section-sub on-dark">Nomeamos as dores de quem quer entrar no mercado de pagamentos.</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-card-q">Quero entrar no mercado de pagamentos mas não sei por onde começar</div>
+        <div class="pain-divider"></div>
+        <div class="pain-card-a">A Confrapag entrega <strong>toda a estrutura pronta</strong>: tecnologia homologada, treinamento, suporte e gestor dedicado. Você chega, aprende e começa a vender em semanas.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-q">Tenho uma marca ou empresa mas não tenho tecnologia para processar pagamentos</div>
+        <div class="pain-divider"></div>
+        <div class="pain-card-a">Com o White Label, você usa a <strong>infraestrutura WeQi + BaaS</strong> da Confrapag para lançar sua própria solução de pagamentos sob a sua marca.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-q">Distribuo maquininhas mas não tenho suporte nem gestão estruturada</div>
+        <div class="pain-divider"></div>
+        <div class="pain-card-a">Na Confrapag você tem <strong>controladoria, jurídico, suporte técnico e Universidade corporativa</strong> inclusos. Não é só vender: é ter uma empresa real.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-q">Quero ter minha própria fintech mas o custo de estrutura é proibitivo</div>
+        <div class="pain-divider"></div>
+        <div class="pain-card-a">Montar infraestrutura do zero custa <strong>R$ 3–10 milhões e anos</strong>. Com a Confrapag você começa com a mesma tecnologia de grandes players, sem esse investimento.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== GANHOS ======================== -->
+<section class="section earn-section">
+  <div class="container">
+    <div class="text-center">
+      <span class="badge badge-green">Transparência total</span>
+      <h2 class="section-title" style="margin-top:16px;color:var(--navy);">Quanto posso ganhar?</h2>
+      <p class="section-sub">Resultados baseados em empreendedores reais da rede. Quanto maior o volume transacionado, maior a receita.</p>
+    </div>
+    <div class="earn-grid">
+      <div class="earn-card">
+        <div class="earn-level">Fase Inicial</div>
+        <div class="earn-type">Licenciado Iniciante</div>
+        <div class="earn-val">R$ 5k–12k</div>
+        <div class="earn-period">por mês</div>
+        <ul class="earn-items">
+          <li>10 a 30 clientes ativos</li>
+          <li>TPV mensal ~R$ 500k</li>
+          <li>Atuação local definida</li>
+        </ul>
+      </div>
+      <div class="earn-card highlight">
+        <div class="earn-level">Fase Crescimento</div>
+        <div class="earn-type">Licenciado em Expansão</div>
+        <div class="earn-val">R$ 15k–40k</div>
+        <div class="earn-period">por mês</div>
+        <ul class="earn-items">
+          <li>50 a 150 clientes ativos</li>
+          <li>TPV mensal R$ 2–5M</li>
+          <li>Equipe comercial formada</li>
+        </ul>
+      </div>
+      <div class="earn-card">
+        <div class="earn-level">White Label</div>
+        <div class="earn-type">Operação Própria</div>
+        <div class="earn-val">R$ 50k–500k+</div>
+        <div class="earn-period">por mês</div>
+        <ul class="earn-items">
+          <li>Rede própria de licenciados</li>
+          <li>TPV mensal R$ 5M–100M+</li>
+          <li>Marca consolidada no mercado</li>
+        </ul>
+      </div>
+    </div>
+    <p class="earn-disclaimer">Os valores são estimativas baseadas em resultados reais da rede Confrapag. Resultados individuais variam conforme dedicação, região e estratégia. Não representam garantia de ganho.</p>
+  </div>
+</section>
+
+<!-- ======================== JORNADA ======================== -->
+<section class="section journey-section" id="jornada">
+  <div class="container">
+    <div class="text-center on-dark">
+      <span class="badge badge-dark">Do contrato ao go-live</span>
+      <h2 class="section-title on-dark" style="margin-top:16px;">Jornada do Empreendedor</h2>
+      <p class="section-sub on-dark">O que acontece depois que você decide entrar? Cada etapa tem prazo, entregável e suporte definido.</p>
+    </div>
+    <div class="journey-steps">
+      <div class="journey-step">
+        <div class="j-num">1</div>
+        <h4>Análise & Aprovação</h4>
+        <p>Formulário, análise de perfil e aprovação pelo comitê comercial</p>
+      </div>
+      <div class="journey-step">
+        <div class="j-num">2</div>
+        <h4>Contrato & Acesso</h4>
+        <p>Assinatura, documentação e liberação dos sistemas e portais</p>
+      </div>
+      <div class="journey-step">
+        <div class="j-num">3</div>
+        <h4>Treinamento CFI</h4>
+        <p>Curso de Formação Inicial gratuito com certificação ao final</p>
+      </div>
+      <div class="journey-step">
+        <div class="j-num">4</div>
+        <h4>Primeiro Cliente</h4>
+        <p>Gestor comercial ao seu lado na primeira venda e credenciamento</p>
+      </div>
+      <div class="journey-step">
+        <div class="j-num">5</div>
+        <h4>Crescimento</h4>
+        <p>Metas, suporte contínuo, Universidade e convenção nacional</p>
+      </div>
+    </div>
+    <div class="text-center" style="margin-top:48px;">
+      <div class="journey-sla">
+        <span>⏱ SLA médio do contrato ao go-live:</span>
+        <strong>≤ 30 dias corridos</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== COMPARATIVO ======================== -->
+<section class="section diff-section" id="diferenciais">
+  <div class="container">
+    <div class="text-center">
+      <span class="badge badge-grad">O que nos diferencia</span>
+      <h2 class="section-title" style="margin-top:16px;color:var(--navy);">Confrapag vs. outras opções</h2>
+      <p class="section-sub">Não somos uma distribuidora. Somos um ecossistema completo. Veja a diferença na prática.</p>
+    </div>
+    <div class="diff-table-wrap">
+      <table class="diff-table">
+        <thead>
+          <tr>
+            <th>O que você precisa</th>
+            <th class="hl hl-label">★ Com a Confrapag</th>
+            <th class="hl">Revenda tradicional</th>
+            <th class="hl">Montar do zero</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tecnologia de pagamentos</td>
+            <td class="hl"><span class="check-y">✓</span> WeQi + BaaS próprio</td>
+            <td><span class="check-y">✓</span> API de terceiros</td>
+            <td><span class="check-n">~</span> R$ 5M+ de investimento</td>
+          </tr>
+          <tr>
+            <td>Treinamento e formação</td>
+            <td class="hl"><span class="check-y">✓</span> Universidade Confrapag</td>
+            <td><span class="check-n">✕</span> Por conta própria</td>
+            <td><span class="check-n">✕</span> Por conta própria</td>
+          </tr>
+          <tr>
+            <td>Gestão financeira e controladoria</td>
+            <td class="hl"><span class="check-y">✓</span> CFO + equipe dedicada</td>
+            <td><span class="check-n">✕</span> Não incluso</td>
+            <td><span class="check-n">~</span> Custo alto separado</td>
+          </tr>
+          <tr>
+            <td>Suporte jurídico</td>
+            <td class="hl"><span class="check-y">✓</span> Incluso na operação</td>
+            <td><span class="check-n">✕</span> Não incluso</td>
+            <td><span class="check-n">~</span> Contratação separada</td>
+          </tr>
+          <tr>
+            <td>Portfólio de soluções</td>
+            <td class="hl"><span class="check-y">✓</span> PIX, TEF, Hub, Energia, Online</td>
+            <td><span class="check-n">~</span> Apenas maquininha</td>
+            <td><span class="check-n">~</span> Limitado ao budget</td>
+          </tr>
+          <tr>
+            <td>White Label / marca própria</td>
+            <td class="hl"><span class="check-y">✓</span> Modelo disponível</td>
+            <td><span class="check-n">✕</span> Não oferece</td>
+            <td><span class="check-n">~</span> Anos de desenvolvimento</td>
+          </tr>
+          <tr>
+            <td>Tempo até primeiro cliente</td>
+            <td class="hl"><span class="check-y">✓</span> ≤ 30 dias</td>
+            <td><span class="check-n">~</span> Variável</td>
+            <td><span class="check-n">✕</span> 12 a 24 meses</td>
+          </tr>
+          <tr>
+            <td>Comunidade e convenção anual</td>
+            <td class="hl"><span class="check-y">✓</span> Club 714 + Convenção</td>
+            <td><span class="check-n">✕</span> Sem comunidade</td>
+            <td><span class="check-n">✕</span> Isolado</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== CASOS REAIS ======================== -->
+<section class="section stories-section">
+  <div class="container">
+    <div class="text-center on-dark">
+      <span class="badge badge-green">Histórias reais</span>
+      <h2 class="section-title on-dark" style="margin-top:16px;">Empreendedores que transformaram suas vidas</h2>
+      <p class="section-sub on-dark">Substituir por depoimentos reais com foto, autorização e números validados.</p>
+    </div>
+    <div class="stories-grid">
+      <div class="story-card">
+        <div class="story-tags">
+          <div class="story-tag before"><div class="story-tag-l">Antes</div><div class="story-tag-v">CLT — R$ 2.800/mês</div></div>
+          <div class="story-tag after"><div class="story-tag-l">Hoje</div><div class="story-tag-v">R$ 18k/mês</div></div>
+        </div>
+        <blockquote class="story-q">"Em 8 meses passei a faturar mais do que o triplo do meu salário anterior. O treinamento da Confrapag me deu a base que eu precisava para começar a vender com confiança."</blockquote>
+        <div class="story-person">
+          <div class="story-av">R</div>
+          <div><strong>Ricardo S.</strong><span>Licenciado · Interior SP · 14 meses de rede</span></div>
+        </div>
+        <div class="story-result"><div class="story-result-l">TPV mensal gerado</div><div class="story-result-v">R$ 1,2M/mês</div></div>
+      </div>
+      <div class="story-card">
+        <div class="story-tags">
+          <div class="story-tag before"><div class="story-tag-l">Antes</div><div class="story-tag-v">Autônomo sem estrutura</div></div>
+          <div class="story-tag after"><div class="story-tag-l">Hoje</div><div class="story-tag-v">White Label · 3 funcionários</div></div>
+        </div>
+        <blockquote class="story-q">"Sempre quis ter minha própria fintech mas achava impossível. A Confrapag me mostrou que dá para começar com o que você tem e crescer com suporte de verdade."</blockquote>
+        <div class="story-person">
+          <div class="story-av">M</div>
+          <div><strong>Mariana T.</strong><span>White Label · Região Sul · 2 anos</span></div>
+        </div>
+        <div class="story-result"><div class="story-result-l">Receita mensal da operação</div><div class="story-result-v">R$ 85k/mês</div></div>
+      </div>
+      <div class="story-card">
+        <div class="story-tags">
+          <div class="story-tag before"><div class="story-tag-l">Antes</div><div class="story-tag-v">Distribuidora sem margem</div></div>
+          <div class="story-tag after"><div class="story-tag-l">Hoje</div><div class="story-tag-v">70 licenciados próprios</div></div>
+        </div>
+        <blockquote class="story-q">"Em 18 meses saímos de distribuidora de maquininha para uma fintech regional com 70 licenciados sob a nossa própria marca."</blockquote>
+        <div class="story-person">
+          <div class="story-av">C</div>
+          <div><strong>Carlos A.</strong><span>White Label · Centro-Oeste · 18 meses</span></div>
+        </div>
+        <div class="story-result"><div class="story-result-l">TPV da rede própria</div><div class="story-result-v">R$ 12M/mês</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== SOLUÇÕES ======================== -->
+<section class="section sol-section" id="solucoes">
+  <div class="container">
+    <div class="text-center">
+      <span class="badge badge-grad">Portfólio completo</span>
+      <h2 class="section-title" style="margin-top:16px;color:var(--navy);">Soluções que você vende — e como ganha com cada uma</h2>
+      <p class="section-sub">Mais de uma forma de gerar receita. Cada solução tem margem, mercado e público definidos.</p>
+    </div>
+    <div class="sol-grid">
+      <div class="sol-card">
+        <div class="sol-icon">💳</div>
+        <h4>ConfraTEF</h4>
+        <p>Pagamento integrado para estabelecimentos com software de gestão. Alta margem e contrato de fidelidade com o cliente.</p>
+        <span class="sol-tag">✓ Recorrência garantida</span>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon">⚡</div>
+        <h4>ConfraPix</h4>
+        <p>Processamento PIX para negócios. Alta demanda, fácil de vender e com comissão por volume transacionado.</p>
+        <span class="sol-tag">✓ Demanda crescente</span>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon">🌐</div>
+        <h4>ConfraOnline</h4>
+        <p>Gateway para e-commerce e lojas virtuais. Mercado em crescimento acelerado com bom ticket médio.</p>
+        <span class="sol-tag">✓ Mercado em expansão</span>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon">🔗</div>
+        <h4>ConfraHub</h4>
+        <p>Hub financeiro completo: conta digital, crédito, seguros e benefícios. Produto completo para pessoa jurídica.</p>
+        <span class="sol-tag">✓ Ticket alto</span>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon">⚡</div>
+        <h4>ConfraEnergia <span class="new-pill">NOVO</span></h4>
+        <p>Porta de entrada ideal: venda energia limpa para empresas e amplie seu portfólio. Ciclo rápido e base de clientes ampla.</p>
+        <span class="sol-tag-new">→ Porta de entrada</span>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon">💻</div>
+        <h4>ConfraSystem</h4>
+        <p>Sistema de gestão para estabelecimentos. Cria dependência tecnológica e amplia o ticket por cliente.</p>
+        <span class="sol-tag">✓ Fideliza o cliente</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== UNIVERSIDADE ======================== -->
+<section class="section univ-section" id="universidade">
+  <div class="container">
+    <div class="univ-grid">
+      <div>
+        <span class="badge badge-dark">Formação contínua</span>
+        <h2 class="section-title on-dark" style="margin-top:16px;">Universidade Confrapag</h2>
+        <p class="section-sub on-dark">O maior diferencial que os concorrentes não têm. Formação completa do empreendedor — do técnico ao estratégico — com cursos gratuitos e certificação reconhecida.</p>
+        <ul class="univ-list">
+          <li class="univ-item">
+            <div class="univ-ic">🎓</div>
+            <div>
+              <strong>CFI — Curso de Formação Inicial</strong>
+              <span>Gratuito para todos. Certificação obrigatória antes de operar. Cobre produto, compliance e vendas.</span>
+            </div>
+          </li>
+          <li class="univ-item">
+            <div class="univ-ic">💡</div>
+            <div>
+              <strong>Club 714 — Mentalidade Empreendedora</strong>
+              <span>Programa de desenvolvimento pessoal e financeiro com base em princípios de liderança. Exclusivo para a rede.</span>
+            </div>
+          </li>
+          <li class="univ-item">
+            <div class="univ-ic">🏆</div>
+            <div>
+              <strong>Convenção Nacional Anual</strong>
+              <span>Encontro presencial de toda a rede. Premiação, metas, networking e atualização estratégica.</span>
+            </div>
+          </li>
+          <li class="univ-item">
+            <div class="univ-ic">📈</div>
+            <div>
+              <strong>Trilhas por Nível</strong>
+              <span>Conteúdo segmentado do Licenciado Iniciante ao White Label, com certificação em cada etapa.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="univ-card">
+          <p class="univ-card-title">Cursos disponíveis</p>
+          <div class="course-row">
+            <div class="course-ic">🎯</div>
+            <div><strong>Formação Inicial (CFI)</strong><span>Obrigatório · 8h · Certificado</span></div>
+            <span class="course-free">Grátis</span>
+          </div>
+          <div class="course-row">
+            <div class="course-ic">💰</div>
+            <div><strong>Vendas em Pagamentos</strong><span>Intermediário · 6h · Certificado</span></div>
+            <span class="course-free">Grátis</span>
+          </div>
+          <div class="course-row">
+            <div class="course-ic">🏦</div>
+            <div><strong>Gestão Financeira para LAs</strong><span>Avançado · 10h · Certificado</span></div>
+            <span class="course-free">Grátis</span>
+          </div>
+          <div class="course-row">
+            <div class="course-ic">💡</div>
+            <div><strong>Club 714 — Mentalidade</strong><span>Desenvolvimento pessoal · Contínuo</span></div>
+            <span class="course-free">Exclusivo rede</span>
+          </div>
+          <div class="course-row">
+            <div class="course-ic">🚀</div>
+            <div><strong>White Label — Operação Própria</strong><span>Estratégico · 16h · Certificado</span></div>
+            <span class="course-free">Exclusivo WL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== OPERAÇÕES ATIVAS ======================== -->
+<section class="section ops-section">
+  <div class="container">
+    <div class="text-center">
+      <span class="badge badge-grad">Prova social real</span>
+      <h2 class="section-title" style="margin-top:16px;color:var(--navy);">Marcas construídas sobre a infraestrutura Confrapag</h2>
+    </div>
+    <div class="ops-context">
+      <strong>Essas empresas começaram como você.</strong> Empreendedores que queriam entrar no mercado de pagamentos. Hoje são fintechs com centenas de clientes, processando milhões por mês — sobre a mesma infraestrutura que a Confrapag coloca à sua disposição. <strong>A sua marca pode ser a próxima.</strong>
+    </div>
+    <div class="ops-grid">
+      <div class="op-card">
+        <div class="op-logo">🦅</div>
+        <h4>AraguaiaPay</h4>
+        <p>Fintech regional com forte presença no Centro-Oeste</p>
+        <div class="op-tpv">R$ 15M+</div>
+        <div class="op-tpv-l">TPV mensal</div>
+      </div>
+      <div class="op-card">
+        <div class="op-logo">⚡</div>
+        <h4>Athos Pay</h4>
+        <p>Pagamentos para pequenos e médios negócios</p>
+        <div class="op-tpv">R$ 8M+</div>
+        <div class="op-tpv-l">TPV mensal</div>
+      </div>
+      <div class="op-card">
+        <div class="op-logo">🐂</div>
+        <h4>BullBank</h4>
+        <p>Serviços bancários integrados para empresas</p>
+        <div class="op-tpv">R$ 22M+</div>
+        <div class="op-tpv-l">TPV mensal</div>
+      </div>
+      <div class="op-card">
+        <div class="op-logo">🔓</div>
+        <h4>LibberPay</h4>
+        <p>Soluções de pagamento com foco em liberdade financeira</p>
+        <div class="op-tpv">R$ 11M+</div>
+        <div class="op-tpv-l">TPV mensal</div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--gray);margin-top:24px;">+ 64 operações White Label ativas na rede · Números para fins de protótipo — atualizar com dados reais</p>
+  </div>
+</section>
+
+<!-- ======================== CTA FINAL ======================== -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Pronto para entrar no mercado<br>de pagamentos do jeito certo?</h2>
+    <p>Mais de 700 empreendedores já escolheram a Confrapag.<br>Fale com um consultor e receba uma análise gratuita da sua oportunidade.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-grad btn-lg">Quero ser Licenciado</a>
+      <a href="#" class="btn btn-outline-white btn-lg">Quero minha própria fintech</a>
+    </div>
+    <p class="cta-note">Sem taxa oculta · Análise gratuita de perfil · Retorno em até 24h</p>
+  </div>
+</section>
+
+<!-- ======================== FOOTER ======================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo-fallback">
+          <div class="logo-icon">CP</div>
+          <span class="logo-name">confrapag</span>
+        </div>
+        <p class="footer-brand-txt">O maior ecossistema de pagamentos para empreendedores do Brasil. Tecnologia, formação e suporte para você crescer.</p>
+        <p class="footer-addr">Rua Aguaçu, 171 Bloco D — Edifício Jerivá<br>Campinas / SP</p>
+      </div>
+      <div class="footer-col">
+        <h5>Oportunidades</h5>
+        <a href="#">Seja um Licenciado</a>
+        <a href="#">Seja um White Label</a>
+        <a href="#">Plano de Carreira LA</a>
+        <a href="#">Diferenciais</a>
+      </div>
+      <div class="footer-col">
+        <h5>Soluções</h5>
+        <a href="#">ConfraTEF</a>
+        <a href="#">ConfraPix</a>
+        <a href="#">ConfraOnline</a>
+        <a href="#">ConfraHub</a>
+        <a href="#">ConfraEnergia</a>
+      </div>
+      <div class="footer-col">
+        <h5>Empresa</h5>
+        <a href="#">Universidade Confrapag</a>
+        <a href="#">Club 714</a>
+        <a href="#">Blog</a>
+        <a href="#">Contato</a>
+        <a href="#">Políticas de Privacidade</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Confrapag · Todos os direitos reservados</p>
+      <div class="socials">
+        <a href="#" class="social">f</a>
+        <a href="#" class="social">in</a>
+        <a href="#" class="social">▶</a>
+        <a href="#" class="social">📷</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
