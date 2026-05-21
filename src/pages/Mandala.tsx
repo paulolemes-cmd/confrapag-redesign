@@ -103,11 +103,12 @@ export default function Mandala() {
 
   useEffect(() => {
     const container = chartRef.current;
-    const tip = tipRef.current;
-    const tipName = tipNameRef.current;
-    const tipRing = tipRingRef.current;
-    const tipDesc = tipDescRef.current;
-    if (!container || !tip || !tipName || !tipRing || !tipDesc) return;
+    if (!container || !tipRef.current || !tipNameRef.current || !tipRingRef.current || !tipDescRef.current) return;
+
+    const tip = tipRef.current!;
+    const tipName = tipNameRef.current!;
+    const tipRing = tipRingRef.current!;
+    const tipDesc = tipDescRef.current!;
 
     d3.select(container).selectAll('*').remove();
 
