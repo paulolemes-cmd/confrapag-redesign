@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Estúdio de Podcast — Confrapag | Projeto Sala 18</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#10104F; --navy-2:#1A1A6E; --ink:#000811;
+    --green:#15F35B; --green-d:#0FA84A; --blue:#1599FF; --blue-d:#0077CC;
+    --amber:#FFB020; --paper:#FAFBFF; --line:#E5E7EB; --muted:#6B7280; --slate:#374151;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.55}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* HEADER */
+  header{background:linear-gradient(135deg,var(--ink) 0%,var(--navy) 55%,var(--navy-2) 100%);color:#fff;padding:46px 0 40px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;background:radial-gradient(circle,rgba(21,243,91,.18),transparent 70%);border-radius:50%}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(21,243,91,.14);border:1px solid rgba(21,243,91,.4);color:var(--green);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  header h1{font-size:clamp(28px,4.5vw,46px);font-weight:800;margin:18px 0 8px;letter-spacing:-.02em;line-height:1.05}
+  header h1 b{color:var(--green)}
+  header p.sub{color:#B8BEE0;font-size:16px;max-width:680px}
+  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:30px}
+  .meta-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px}
+  .meta-card .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8E96C8;font-weight:600}
+  .meta-card .v{font-size:20px;font-weight:700;margin-top:4px}
+  .meta-card .v small{font-size:13px;color:#B8BEE0;font-weight:500}
+
+  /* SECTIONS */
+  section{padding:48px 0}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-d)}
+  h2{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin:8px 0 6px}
+  .lead{color:var(--muted);max-width:760px;margin-bottom:8px}
+
+  /* PLAN */
+  .plan-shell{display:grid;grid-template-columns:1.55fr 1fr;gap:28px;align-items:start;margin-top:28px}
+  @media(max-width:900px){.plan-shell{grid-template-columns:1fr}}
+  .plan-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 18px 40px -28px rgba(16,16,79,.5)}
+  svg{width:100%;height:auto;display:block}
+  .legend{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 40px -28px rgba(16,16,79,.5)}
+  .legend h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);margin-bottom:14px}
+  .leg-item{display:flex;gap:12px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed #EEF0F6;font-size:13.5px}
+  .leg-item:last-child{border-bottom:none}
+  .leg-num{flex:0 0 24px;height:24px;border-radius:7px;background:var(--navy);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .leg-num.g{background:var(--green-d)} .leg-num.b{background:var(--blue-d)} .leg-num.a{background:var(--amber)}
+  .leg-item b{font-weight:600}
+  .leg-item span{color:var(--muted)}
+
+  /* CARDS */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:26px}
+  @media(max-width:840px){.grid3{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;position:relative}
+  .card .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:#F0F2F8}
+  .card h4{font-size:17px;font-weight:700;margin-bottom:8px}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .card li{font-size:14px;color:var(--slate);display:flex;gap:9px;align-items:flex-start}
+  .card li::before{content:"";flex:0 0 7px;height:7px;border-radius:50%;background:var(--green);margin-top:7px}
+  .card.alert{border-color:#FFD9A8;background:linear-gradient(180deg,#FFFBF4,#fff)}
+  .card.alert li::before{background:var(--amber)}
+
+  .alt-banner{background:linear-gradient(110deg,var(--navy),var(--navy-2));color:#fff;border-radius:20px;padding:30px 32px;margin-top:30px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+  @media(max-width:680px){.alt-banner{grid-template-columns:1fr}}
+  .alt-banner .big{font-size:46px}
+  .alt-banner h3{font-size:20px;margin-bottom:6px}
+  .alt-banner p{color:#C4CAEC;font-size:14.5px}
+
+  table{width:100%;border-collapse:collapse;margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px}
+  th{background:var(--navy);color:#fff;text-align:left;padding:13px 16px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+  td{padding:12px 16px;border-top:1px solid var(--line);color:var(--slate)}
+  tr:nth-child(even) td{background:#FAFBFF}
+  td b{color:var(--ink)}
+  .pill{display:inline-block;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600}
+  .pill.rec{background:rgba(21,243,91,.15);color:var(--green-d)}
+
+  .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+  @media(max-width:680px){.checklist{grid-template-columns:1fr}}
+  .chk{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--slate)}
+  .chk b{display:block;color:var(--ink);margin-bottom:2px}
+
+  footer{background:var(--ink);color:#8E96C8;padding:34px 0;font-size:13px;text-align:center}
+  footer b{color:#fff}
+  .divider{height:1px;background:var(--line);margin:0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">● Projeto Confrapag · Sala 18</span>
+    <h1>Estúdio de Podcast <b>Confrapag</b><br>Projeto de layout, acústica e técnica</h1>
+    <p class="sub">Planta executiva na escala real (3,84 × 3,16 m) para a Sala 18 do Bloco Jeriva — bancada diagonal, posicionamento de câmeras, iluminação, microfones e tratamento acústico, com os ajustes de elétrica e ar-condicionado a pedir ao engenheiro antes da obra.</p>
+    <div class="meta-grid">
+      <div class="meta-card"><div class="k">Dimensões</div><div class="v">3,84 × 3,16 m</div></div>
+      <div class="meta-card"><div class="k">Área útil</div><div class="v">≈ 12,1 m²</div></div>
+      <div class="meta-card"><div class="k">Local</div><div class="v" style="font-size:15px">R. Aguaçú, 171<br><small>Alphaville · Bloco Jeriva</small></div></div>
+      <div class="meta-card"><div class="k">Capacidade</div><div class="v">3 pessoas<br><small>host + 2 convidados</small></div></div>
+      <div class="meta-card"><div class="k">Base</div><div class="v" style="font-size:15px">Projeto Eng.<br><small>Paulo Sole Ponce</small></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- PLANTA -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">Planta baixa · escala 1:50</span>
+  <h2>Layout do estúdio na medida real</h2>
+  <p class="lead">A câmera principal aponta para o canto sólido (parede direita/inferior, com painel ripado de fundo). O vidro fica de lado, como vitrine de marca com cortina acústica. O posto de operação fica fora do enquadramento.</p>
+
+  <div class="plan-shell">
+    <div class="plan-box">
+      <svg viewBox="0 0 660 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Planta baixa do estúdio de podcast Confrapag">
+        <defs>
+          <pattern id="glass" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="10" stroke="#1599FF" stroke-width="1.4" opacity=".5"/>
+          </pattern>
+          <pattern id="ripado" width="9" height="9" patternUnits="userSpaceOnUse">
+            <rect width="9" height="9" fill="#7B4B27"/>
+            <line x1="0" y1="0" x2="0" y2="9" stroke="#5E3818" stroke-width="2.2"/>
+          </pattern>
+          <radialGradient id="lightG" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFD37A" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#FFB020" stop-opacity="0"/>
+          </radialGradient>
+          <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#1599FF"/>
+          </marker>
+          <linearGradient id="rug" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#22255C"/><stop offset="100%" stop-color="#13153a"/>
+          </linearGradient>
+        </defs>
+
+        <!-- FLOOR -->
+        <rect x="110" y="90" width="442" height="538" fill="#F6F8FD"/>
+
+        <!-- ACOUSTIC TREATMENT (zones) -->
+        <!-- right wall: painel ripado (cenário) -->
+        <rect x="540" y="300" width="12" height="320" fill="url(#ripado)"/>
+        <!-- right wall acoustic upper -->
+        <rect x="540" y="108" width="12" height="180" fill="#15F35B" opacity=".5"/>
+        <!-- bottom wall acoustic -->
+        <rect x="120" y="616" width="420" height="12" fill="#15F35B" opacity=".5"/>
+        <!-- top wall acoustic (left of door) -->
+        <rect x="120" y="90" width="46" height="12" fill="#15F35B" opacity=".5"/>
+        <!-- left wall: cortina acústica sobre vidro -->
+        <rect x="110" y="104" width="12" height="516" fill="#1599FF" opacity=".22"/>
+        <line x1="116" y1="104" x2="116" y2="620" stroke="#1599FF" stroke-width="2" stroke-dasharray="2 5" opacity=".7"/>
+
+        <!-- bass traps (4 corners) -->
+        <path d="M110,90 L150,90 L110,130 Z" fill="#0FA84A" opacity=".55"/>
+        <path d="M552,90 L512,90 L552,130 Z" fill="#0FA84A" opacity=".55"/>
+        <path d="M110,628 L150,628 L110,588 Z" fill="#0FA84A" opacity=".55"/>
+        <path d="M552,628 L512,628 L552,588 Z" fill="#0FA84A" opacity=".55"/>
+
+        <!-- RUG under talent -->
+        <g transform="rotate(-37 432 510)">
+          <rect x="282" y="430" width="300" height="170" rx="20" fill="url(#rug)" opacity=".9"/>
+        </g>
+
+        <!-- WALLS -->
+        <!-- top (corredor) -->
+        <line x1="110" y1="90" x2="166" y2="90" stroke="#10104F" stroke-width="7"/>
+        <line x1="292" y1="90" x2="552" y2="90" stroke="#10104F" stroke-width="7"/>
+        <!-- bottom -->
+        <line x1="110" y1="628" x2="552" y2="628" stroke="#10104F" stroke-width="7"/>
+        <!-- right -->
+        <line x1="552" y1="90" x2="552" y2="628" stroke="#10104F" stroke-width="7"/>
+        <!-- left = glass FL FIXA -->
+        <line x1="110" y1="90" x2="110" y2="628" stroke="#1599FF" stroke-width="7"/>
+        <rect x="106" y="100" width="8" height="520" fill="url(#glass)"/>
+
+        <!-- DOOR (top, swing) -->
+        <line x1="166" y1="90" x2="292" y2="90" stroke="#fff" stroke-width="7"/>
+        <path d="M166,90 A126,126 0 0,1 292,90" fill="none" stroke="#9AA3C9" stroke-width="1.4" stroke-dasharray="4 4"/>
+        <line x1="166" y1="90" x2="166" y2="210" stroke="#9AA3C9" stroke-width="2.4"/>
+
+        <!-- AC unit on top wall -->
+        <rect x="330" y="92" width="96" height="16" rx="4" fill="#fff" stroke="#10104F" stroke-width="2"/>
+        <line x1="346" y1="108" x2="346" y2="134" stroke="#1599FF" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="378" y1="108" x2="392" y2="140" stroke="#1599FF" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="410" y1="108" x2="410" y2="134" stroke="#1599FF" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- OPERATION corner (rack + PC) top-left -->
+        <rect x="124" y="118" width="92" height="118" rx="8" fill="#EAEDF7" stroke="#9AA3C9" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <rect x="132" y="126" width="76" height="40" rx="4" fill="#374151"/>
+        <circle cx="170" cy="206" r="15" fill="#fff" stroke="#374151" stroke-width="2"/>
+
+        <!-- BENCH diagonal -->
+        <line x1="313" y1="587" x2="537" y2="419" stroke="#13153a" stroke-width="30" stroke-linecap="round"/>
+        <line x1="313" y1="587" x2="537" y2="419" stroke="#2b2e63" stroke-width="22" stroke-linecap="round"/>
+
+        <!-- MICS on bench (3) -->
+        <circle cx="372" cy="546" r="6" fill="#15F35B" stroke="#0a0a2a" stroke-width="1.6"/>
+        <circle cx="425" cy="506" r="6" fill="#15F35B" stroke="#0a0a2a" stroke-width="1.6"/>
+        <circle cx="478" cy="466" r="6" fill="#15F35B" stroke="#0a0a2a" stroke-width="1.6"/>
+
+        <!-- CHAIRS (talent, 3) -->
+        <g fill="#10104F">
+          <circle cx="393" cy="579" r="15"/><circle cx="449" cy="537" r="15"/><circle cx="505" cy="495" r="15"/>
+        </g>
+        <g fill="#fff" font-size="11" font-weight="700" text-anchor="middle">
+          <text x="393" y="583">C</text><text x="449" y="541">H</text><text x="505" y="499">C</text>
+        </g>
+
+        <!-- CAMERAS with FOV -->
+        <!-- cam1 main -->
+        <path d="M250,293 L470,470 L360,560 Z" fill="#1599FF" opacity=".10"/>
+        <circle cx="250" cy="293" r="13" fill="#0077CC"/>
+        <rect x="244" y="287" width="12" height="12" rx="2" fill="#fff"/>
+        <!-- cam2 cut -->
+        <circle cx="208" cy="452" r="11" fill="#1599FF"/>
+        <rect x="203" y="447" width="10" height="10" rx="2" fill="#fff"/>
+
+        <!-- LIGHTS -->
+        <g>
+          <circle cx="327" cy="372" r="34" fill="url(#lightG)"/>
+          <circle cx="327" cy="372" r="11" fill="#FFB020" stroke="#fff" stroke-width="2"/>
+          <circle cx="278" cy="512" r="26" fill="url(#lightG)"/>
+          <circle cx="278" cy="512" r="9" fill="#FFC85A" stroke="#fff" stroke-width="2"/>
+          <circle cx="528" cy="566" r="24" fill="url(#lightG)"/>
+          <circle cx="528" cy="566" r="9" fill="#FFB020" stroke="#fff" stroke-width="2"/>
+          <!-- background light (brand color) -->
+          <circle cx="536" cy="430" r="9" fill="#15F35B" stroke="#fff" stroke-width="2"/>
+        </g>
+
+        <!-- OUTLETS (reinforced circuit) + data -->
+        <g fill="#fff" stroke="#10104F" stroke-width="1.8">
+          <rect x="220" y="112" width="13" height="13" rx="2"/>
+          <rect x="540" y="200" width="13" height="13" rx="2"/>
+          <rect x="540" y="500" width="13" height="13" rx="2"/>
+          <rect x="300" y="615" width="13" height="13" rx="2"/>
+          <rect x="450" y="615" width="13" height="13" rx="2"/>
+        </g>
+        <!-- data RJ45 at bench -->
+        <rect x="455" y="498" width="14" height="14" rx="2" fill="#1599FF" stroke="#fff" stroke-width="1.6"/>
+
+        <!-- NUMBER BADGES -->
+        <g font-family="Inter" font-size="12" font-weight="700" text-anchor="middle">
+          <g><circle cx="455" cy="478" r="12" fill="#000811"/><text x="455" y="482" fill="#fff">1</text></g>
+          <g><circle cx="449" cy="537" r="11" fill="#10104F"/><text x="449" y="541" fill="#fff">2</text></g>
+          <g><circle cx="250" cy="293" r="12" fill="#0077CC" stroke="#fff" stroke-width="1"/><text x="250" y="297" fill="#fff" font-size="11">3</text></g>
+          <g><circle cx="208" cy="452" r="11" fill="#0077CC"/><text x="208" y="456" fill="#fff" font-size="10">4</text></g>
+          <g><circle cx="327" cy="372" r="12" fill="#FFB020"/><text x="327" y="376" fill="#1a1a1a">5</text></g>
+          <g><circle cx="278" cy="512" r="11" fill="#FFB020"/><text x="278" y="516" fill="#1a1a1a">6</text></g>
+          <g><circle cx="528" cy="566" r="11" fill="#FFB020"/><text x="528" y="570" fill="#1a1a1a">7</text></g>
+          <g><circle cx="536" cy="430" r="11" fill="#0FA84A"/><text x="536" y="434" fill="#fff">8</text></g>
+          <g><circle cx="170" cy="170" r="12" fill="#000811"/><text x="170" y="174" fill="#fff">9</text></g>
+          <g><circle cx="372" cy="546" r="10" fill="#0FA84A"/><text x="372" y="550" fill="#fff" font-size="10">10</text></g>
+          <g><circle cx="546" cy="350" r="11" fill="#7B4B27"/><text x="546" y="354" fill="#fff" font-size="10">11</text></g>
+          <g><circle cx="546" cy="200" r="11" fill="#0FA84A"/><text x="546" y="204" fill="#fff" font-size="10">12</text></g>
+          <g><circle cx="130" cy="110" r="11" fill="#0FA84A"/><text x="130" y="114" fill="#fff" font-size="10">13</text></g>
+          <g><circle cx="116" cy="360" r="11" fill="#1599FF"/><text x="116" y="364" fill="#fff" font-size="10">14</text></g>
+          <g><circle cx="432" cy="540" r="0" fill="none"/></g>
+          <g><circle cx="378" cy="124" r="11" fill="#000811"/><text x="378" y="128" fill="#fff" font-size="10">16</text></g>
+          <g><circle cx="226" cy="118" r="10" fill="#10104F"/><text x="226" y="122" fill="#fff" font-size="10">17</text></g>
+          <g><circle cx="462" cy="505" r="10" fill="#1599FF"/><text x="462" y="509" fill="#fff" font-size="10">18</text></g>
+          <g><circle cx="229" cy="118" r="0"/></g>
+          <g><circle cx="200" cy="95" r="0"/></g>
+        </g>
+        <!-- 15 rug + 19 door labels placed -->
+        <g font-family="Inter" font-size="12" font-weight="700" text-anchor="middle">
+          <g><circle cx="408" cy="560" r="11" fill="#22255C"/><text x="408" y="564" fill="#fff" font-size="10">15</text></g>
+          <g><circle cx="229" cy="150" r="11" fill="#9AA3C9"/><text x="229" y="154" fill="#fff" font-size="10">19</text></g>
+        </g>
+
+        <!-- WALL LABELS -->
+        <g font-family="Inter" font-size="11.5" font-weight="700" fill="#6B7280" text-anchor="middle">
+          <text x="331" y="78">CORREDOR — isolamento de ruído</text>
+          <text x="331" y="654">PAREDE SÓLIDA — tratamento acústico</text>
+          <text x="92" y="365" transform="rotate(-90 92 365)" fill="#0077CC">VIDRO · FL FIXA → RECEPÇÃO</text>
+          <text x="574" y="365" transform="rotate(90 574 365)">PAREDE SÓLIDA · CENÁRIO</text>
+        </g>
+
+        <!-- DIMENSIONS -->
+        <g stroke="#10104F" stroke-width="1.2" fill="#10104F" font-family="JetBrains Mono" font-size="13" font-weight="600">
+          <!-- left vertical 3.84 -->
+          <line x1="64" y1="90" x2="64" y2="628"/>
+          <line x1="59" y1="90" x2="69" y2="90"/><line x1="59" y1="628" x2="69" y2="628"/>
+          <text x="50" y="365" transform="rotate(-90 50 365)" text-anchor="middle">3,84 m</text>
+          <!-- top horizontal 3.16 -->
+          <line x1="110" y1="46" x2="552" y2="46"/>
+          <line x1="110" y1="41" x2="110" y2="51"/><line x1="552" y1="41" x2="552" y2="51"/>
+          <text x="331" y="40" text-anchor="middle">3,16 m</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <h3>Legenda</h3>
+      <div class="leg-item"><div class="leg-num">1</div><div><b>Bancada diagonal</b> <span>— host + 2 convidados, MDF preto fosco (~1,6 m)</span></div></div>
+      <div class="leg-item"><div class="leg-num">2</div><div><b>Cadeiras (3)</b> <span>— estofado liso, base fixa silenciosa</span></div></div>
+      <div class="leg-item"><div class="leg-num b">3</div><div><b>Câmera principal</b> <span>— mirrorless, aponta para o canto sólido</span></div></div>
+      <div class="leg-item"><div class="leg-num b">4</div><div><b>Câmera de corte</b> <span>— close lateral</span></div></div>
+      <div class="leg-item"><div class="leg-num a">5</div><div><b>Luz principal (Key)</b> <span>— painel LED + softbox</span></div></div>
+      <div class="leg-item"><div class="leg-num a">6</div><div><b>Luz de preenchimento (Fill)</b> <span>— suaviza sombras</span></div></div>
+      <div class="leg-item"><div class="leg-num a">7</div><div><b>Luz de recorte (Back)</b> <span>— separa talento do fundo</span></div></div>
+      <div class="leg-item"><div class="leg-num g">8</div><div><b>Luz de fundo</b> <span>— cor da marca (verde Confrapag)</span></div></div>
+      <div class="leg-item"><div class="leg-num">9</div><div><b>Posto de operação</b> <span>— PC, no-break, interface, rack (fora do quadro)</span></div></div>
+      <div class="leg-item"><div class="leg-num g">10</div><div><b>Microfones (3)</b> <span>— dinâmicos na bancada</span></div></div>
+      <div class="leg-item"><div class="leg-num" style="background:#7B4B27">11</div><div><b>Painel ripado de madeira</b> <span>— cenário/backdrop</span></div></div>
+      <div class="leg-item"><div class="leg-num g">12</div><div><b>Painéis acústicos</b> <span>— lã de rocha/PET nas paredes sólidas</span></div></div>
+      <div class="leg-item"><div class="leg-num g">13</div><div><b>Bass traps</b> <span>— nos 4 cantos verticais</span></div></div>
+      <div class="leg-item"><div class="leg-num b">14</div><div><b>Cortina acústica</b> <span>— sobre o vidro (controla som e reflexo)</span></div></div>
+      <div class="leg-item"><div class="leg-num" style="background:#22255C">15</div><div><b>Tapete</b> <span>— sob a bancada, mata reflexão do piso</span></div></div>
+      <div class="leg-item"><div class="leg-num">16</div><div><b>Ar-condicionado</b> <span>— inverter, fluxo direcionado p/ cima (longe do mic)</span></div></div>
+      <div class="leg-item"><div class="leg-num">17</div><div><b>Tomadas</b> <span>— circuito dedicado reforçado (6–8 pontos)</span></div></div>
+      <div class="leg-item"><div class="leg-num b">18</div><div><b>Ponto de dados RJ45</b> <span>— internet cabeada na bancada</span></div></div>
+      <div class="leg-item"><div class="leg-num" style="background:#9AA3C9">19</div><div><b>Porta</b> <span>— acesso pelo corredor</span></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ESPECIFICACOES -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">Especificações técnicas</span>
+  <h2>Os 3 pilares do projeto</h2>
+  <p class="lead">Numa sala de 12 m² com parede de vidro, a ordem de prioridade é: <b>acústica → elétrica/AC → equipamento</b>. Investir em microfone caro antes de tratar a sala é o erro nº 1.</p>
+
+  <div class="grid3">
+    <div class="card">
+      <div class="ic">🔊</div>
+      <h4>Acústica (prioridade nº 1)</h4>
+      <ul>
+        <li>Painéis (lã de rocha/PET com tecido) nas 3 paredes sólidas</li>
+        <li>Bass traps nos 4 cantos verticais</li>
+        <li>Cortina acústica densa sobre o vidro</li>
+        <li>Tapete grosso + nuvem acústica no teto</li>
+        <li>Cobertura ~50% — não "matar" a sala</li>
+      </ul>
+    </div>
+    <div class="card alert">
+      <div class="ic" style="background:#FFF1DD">⚡</div>
+      <h4>Elétrica & AC (definir na obra)</h4>
+      <ul>
+        <li>Circuito dedicado, 6–8 tomadas distribuídas</li>
+        <li>AC inverter silencioso, fluxo p/ cima (longe do mic)</li>
+        <li>Ponto RJ45 cabeado na bancada</li>
+        <li>Isolamento de ruído na parede do corredor</li>
+        <li>Aterramento adequado (evita ruído elétrico no áudio)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="ic">🎬</div>
+      <h4>Cenário & marca</h4>
+      <ul>
+        <li>Painel ripado de madeira na parede de fundo</li>
+        <li>Vidro jateado com logo Confrapag (vitrine)</li>
+        <li>Luz de fundo no verde da marca</li>
+        <li>Plantas para quebrar o "frio" do ambiente</li>
+        <li>Nichos para troféus/peças institucionais</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alt-banner">
+    <div class="big">⚠️</div>
+    <div>
+      <h3>Antes da obra: 3 ajustes para o Eng. Paulo Sole Ponce</h3>
+      <p>O memorando técnico detalha: (1) circuito elétrico dedicado com 6–8 tomadas; (2) ar-condicionado inverter silencioso com fluxo direcionado para o teto; (3) ponto de rede cabeada na bancada + isolamento acústico da parede do corredor. Esses itens são baratos no papel e caros depois de pronto.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EQUIPAMENTOS RESUMO -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">Kit recomendado · nível Intermediário</span>
+  <h2>Equipamentos principais</h2>
+  <p class="lead">A planilha de orçamento (.xlsx) traz os 3 níveis completos com marcas, quantidades e custos. Resumo do nível recomendado para a Confrapag:</p>
+  <table>
+    <thead><tr><th>Categoria</th><th>Equipamento</th><th>Qtd</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td><b>Áudio</b></td><td>Mesa/gravador Rødecaster Pro II</td><td>1</td><td>Coração do estúdio <span class="pill rec">recomendado</span></td></tr>
+      <tr><td><b>Áudio</b></td><td>Microfone dinâmico Shure SM7B</td><td>3</td><td>Rejeita ruído de sala</td></tr>
+      <tr><td><b>Áudio</b></td><td>Braço articulado Rode PSA1+ + fone fechado</td><td>3</td><td>1 por participante</td></tr>
+      <tr><td><b>Vídeo</b></td><td>Câmera mirrorless (saída limpa)</td><td>2</td><td>Principal + corte</td></tr>
+      <tr><td><b>Vídeo</b></td><td>Switcher/captura (ATEM Mini Pro ou Cam Link)</td><td>1</td><td>Troca ao vivo + grava</td></tr>
+      <tr><td><b>Luz</b></td><td>Kit LED (key + fill + back + fundo)</td><td>4</td><td>Luz suave/difusa, baixo calor</td></tr>
+      <tr><td><b>Operação</b></td><td>PC dedicado + no-break + monitor</td><td>1</td><td>Gravação multipista + backup</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CHECKLIST -->
+<section>
+<div class="wrap">
+  <span class="eyebrow">Sequência recomendada</span>
+  <h2>Ordem de execução</h2>
+  <div class="checklist">
+    <div class="chk"><b>1 · Ajustes na obra</b>Enviar memorando ao engenheiro (elétrica, AC, dados, isolamento) antes de fechar paredes.</div>
+    <div class="chk"><b>2 · Acústica</b>Instalar painéis, bass traps, cortina e tapete. Testar o eco da sala vazia.</div>
+    <div class="chk"><b>3 · Móveis & cenário</b>Bancada diagonal, cadeiras, painel ripado, vidro com logo, plantas.</div>
+    <div class="chk"><b>4 · Iluminação</b>Montar key/fill/back/fundo e calibrar para pele e profundidade.</div>
+    <div class="chk"><b>5 · Áudio & vídeo</b>Rødecaster + mics + câmeras + captura. Gravar teste de 10 min.</div>
+    <div class="chk"><b>6 · Operação & backup</b>PC, software (OBS/DaVinci), rotina de backup duplo de cada gravação.</div>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>Estúdio de Podcast Confrapag</b> — Projeto de layout, acústica e técnica · Sala 18 · Bloco Jeriva, Alphaville</p>
+    <p style="margin-top:6px">Escala 1:50 sobre o projeto do Eng. Paulo Sole Ponce (CREA 060.165.403-9) · Documento de trabalho — valores e cotações a confirmar.</p>
+  </div>
+</footer>
+
+</body>
+</html>
