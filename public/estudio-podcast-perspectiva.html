@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Estúdio Confrapag — Vista em Perspectiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{--navy:#10104F;--ink:#000811;--green:#15F35B;--green-d:#0FA84A;--blue:#1599FF;--paper:#FAFBFF;--muted:#6B7280;--line:#E5E7EB}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.55}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  header{background:linear-gradient(135deg,var(--ink),var(--navy) 60%,#1A1A6E);color:#fff;padding:40px 0 34px}
+  .badge{display:inline-flex;gap:8px;align-items:center;background:rgba(21,243,91,.14);border:1px solid rgba(21,243,91,.4);color:var(--green);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  header h1{font-size:clamp(26px,4vw,40px);font-weight:800;margin:16px 0 6px;letter-spacing:-.02em}
+  header h1 b{color:var(--green)}
+  header p{color:#B8BEE0;max-width:680px;font-size:15px}
+  section{padding:38px 0}
+  .render{background:#fff;border:1px solid var(--line);border-radius:22px;padding:14px;box-shadow:0 26px 60px -34px rgba(16,16,79,.55)}
+  svg{width:100%;height:auto;display:block;border-radius:14px}
+  .cap{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .tag{font-size:12.5px;font-weight:600;color:var(--navy);background:#EEF1FA;border:1px solid #E0E5F4;padding:6px 12px;border-radius:100px}
+  .tag b{color:var(--green-d)}
+  .note{margin-top:18px;font-size:13.5px;color:var(--muted);background:#fff;border:1px dashed var(--line);border-left:3px solid var(--blue);border-radius:10px;padding:14px 16px}
+  .links{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+  .links a{text-decoration:none;font-size:14px;font-weight:600;padding:11px 18px;border-radius:11px}
+  .links a.primary{background:var(--green-d);color:#fff}
+  .links a.ghost{background:#fff;border:1px solid var(--line);color:var(--navy)}
+  footer{background:var(--ink);color:#8E96C8;padding:26px 0;font-size:13px;text-align:center;margin-top:20px}
+  footer b{color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="badge">● Confrapag · Sala 18 · Concept render</span>
+    <h1>Estúdio de Podcast <b>Confrapag</b> — Vista em perspectiva</h1>
+    <p>Ilustração conceitual do ambiente projetado (3,84 × 3,16 m), mostrando bancada diagonal, três posições de microfone, painel ripado de fundo, parede de vidro com a marca, iluminação de 3 pontos e o acento verde Confrapag.</p>
+  </div>
+</header>
+
+<section>
+<div class="wrap">
+  <div class="render">
+    <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vista em perspectiva do estúdio de podcast Confrapag">
+      <defs>
+        <linearGradient id="ceil" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#161642"/><stop offset="100%" stop-color="#23235e"/>
+        </linearGradient>
+        <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a2c52"/><stop offset="100%" stop-color="#3a3d63"/>
+        </linearGradient>
+        <linearGradient id="lwall" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#1b6fb0" stop-opacity=".45"/><stop offset="100%" stop-color="#2a90d8" stop-opacity=".18"/>
+        </linearGradient>
+        <linearGradient id="rwall" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0%" stop-color="#202255"/><stop offset="100%" stop-color="#2c2f66"/>
+        </linearGradient>
+        <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8a5630"/><stop offset="100%" stop-color="#5e3818"/>
+        </linearGradient>
+        <radialGradient id="greenglow" cx="50%" cy="60%" r="60%">
+          <stop offset="0%" stop-color="#15F35B" stop-opacity=".55"/><stop offset="100%" stop-color="#15F35B" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="soft" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFE6A8" stop-opacity=".95"/><stop offset="100%" stop-color="#FFB020" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="vig" cx="50%" cy="48%" r="62%">
+          <stop offset="62%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity=".42"/>
+        </radialGradient>
+        <linearGradient id="benchTop" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#33365f"/><stop offset="100%" stop-color="#191b3c"/>
+        </linearGradient>
+      </defs>
+
+      <!-- SHELL -->
+      <!-- ceiling -->
+      <polygon points="60,60 1140,60 760,250 440,250" fill="url(#ceil)"/>
+      <!-- back wall (wood slat cenário) -->
+      <rect x="440" y="250" width="320" height="205" fill="url(#wood)"/>
+      <!-- right wall (acoustic) -->
+      <polygon points="1140,60 760,250 760,455 1140,648" fill="url(#rwall)"/>
+      <!-- left wall (glass vitrine) -->
+      <polygon points="60,60 440,250 440,455 60,648" fill="#243a55"/>
+      <polygon points="60,60 440,250 440,455 60,648" fill="url(#lwall)"/>
+      <!-- floor -->
+      <polygon points="60,648 1140,648 760,455 440,455" fill="url(#floor)"/>
+
+      <!-- BACK WALL: wood slats -->
+      <g stroke="#4a2c12" stroke-width="3" opacity=".55">
+        <line x1="455" y1="250" x2="455" y2="455"/><line x1="475" y1="250" x2="475" y2="455"/>
+        <line x1="495" y1="250" x2="495" y2="455"/><line x1="515" y1="250" x2="515" y2="455"/>
+        <line x1="535" y1="250" x2="535" y2="455"/><line x1="555" y1="250" x2="555" y2="455"/>
+        <line x1="575" y1="250" x2="575" y2="455"/><line x1="595" y1="250" x2="595" y2="455"/>
+        <line x1="615" y1="250" x2="615" y2="455"/><line x1="635" y1="250" x2="635" y2="455"/>
+        <line x1="655" y1="250" x2="655" y2="455"/><line x1="675" y1="250" x2="675" y2="455"/>
+        <line x1="695" y1="250" x2="695" y2="455"/><line x1="715" y1="250" x2="715" y2="455"/>
+        <line x1="735" y1="250" x2="735" y2="455"/><line x1="755" y1="250" x2="755" y2="455"/>
+      </g>
+      <!-- green LED wash on back wall + behind talent -->
+      <ellipse cx="600" cy="430" rx="290" ry="150" fill="url(#greenglow)"/>
+      <!-- Confrapag wordmark on back wall -->
+      <text x="600" y="300" text-anchor="middle" font-family="Inter" font-weight="800" font-size="30" fill="#fff" opacity=".92" letter-spacing="1">confra<tspan fill="#15F35B">pag</tspan></text>
+      <rect x="500" y="312" width="200" height="3" fill="#15F35B" opacity=".8"/>
+
+      <!-- LEFT WALL: glass mullions + reception hint + etched logo -->
+      <g stroke="#bfe0ff" stroke-width="1.5" opacity=".4">
+        <line x1="60" y1="60" x2="440" y2="250"/>
+        <line x1="155" y1="208" x2="440" y2="301"/>
+        <polygon points="60,60 440,250 440,455 60,648" fill="none" stroke="#bfe0ff" stroke-width="2"/>
+        <line x1="188" y1="107" x2="188" y2="585"/>
+        <line x1="300" y1="83" x2="300" y2="560"/>
+      </g>
+      <text x="250" y="360" font-family="Inter" font-weight="800" font-size="20" fill="#dff0ff" opacity=".35" transform="skewY(13)">CONFRAPAG</text>
+
+      <!-- RIGHT WALL: acoustic panels -->
+      <g fill="#15F35B" opacity=".14" stroke="#15F35B" stroke-opacity=".25" stroke-width="1.5">
+        <polygon points="820,150 1080,118 1080,210 820,228"/>
+        <polygon points="820,250 1080,242 1080,330 820,328"/>
+        <polygon points="820,348 1080,358 1080,448 820,418"/>
+      </g>
+
+      <!-- CEILING: acoustic cloud + 2 softboxes glowing -->
+      <polygon points="470,95 730,95 668,175 532,175" fill="#2f3170" stroke="#15F35B" stroke-opacity=".2" stroke-width="1.5"/>
+      <ellipse cx="430" cy="150" rx="70" ry="26" fill="url(#soft)"/>
+      <rect x="395" y="138" width="70" height="24" rx="4" fill="#fff" opacity=".85"/>
+      <ellipse cx="770" cy="150" rx="70" ry="26" fill="url(#soft)"/>
+      <rect x="735" y="138" width="70" height="24" rx="4" fill="#fff" opacity=".85"/>
+
+      <!-- FLOOR: rug under talent -->
+      <polygon points="350,640 850,640 720,470 480,470" fill="#101230" opacity=".92"/>
+      <polygon points="350,640 850,640 720,470 480,470" fill="none" stroke="#15F35B" stroke-opacity=".18" stroke-width="2"/>
+
+      <!-- soft shadows of furniture on floor -->
+      <ellipse cx="600" cy="600" rx="210" ry="40" fill="#000" opacity=".22"/>
+
+      <!-- ===== FURNITURE ===== -->
+      <!-- CHAIRS (3 behind bench) -->
+      <g>
+        <!-- left chair -->
+        <path d="M468,452 q-14,-46 22,-58 q34,-8 40,30 l-6,42 z" fill="#191b3c"/>
+        <ellipse cx="500" cy="470" rx="34" ry="13" fill="#23255a"/>
+        <!-- center chair (host) -->
+        <path d="M566,440 q-14,-50 36,-60 q46,-6 50,40 l-8,46 z" fill="#14163a"/>
+        <ellipse cx="604" cy="462" rx="40" ry="14" fill="#272a63"/>
+        <!-- right chair -->
+        <path d="M690,452 q14,-46 -22,-58 q-34,-8 -40,30 l6,42 z" fill="#191b3c"/>
+        <ellipse cx="700" cy="470" rx="34" ry="13" fill="#23255a"/>
+      </g>
+
+      <!-- BENCH diagonal (top surface + front face) -->
+      <polygon points="430,560 600,512 800,548 660,604" fill="url(#benchTop)" stroke="#3a3d6b" stroke-width="2"/>
+      <polygon points="430,560 660,604 660,628 430,584" fill="#0e1030"/>
+      <polygon points="660,604 800,548 800,572 660,628" fill="#15172f"/>
+      <!-- subtle green edge light on bench -->
+      <polyline points="600,512 800,548" fill="none" stroke="#15F35B" stroke-opacity=".5" stroke-width="2"/>
+
+      <!-- MICS on boom arms (3) -->
+      <g stroke="#0b0b1e" stroke-width="5" fill="none" stroke-linecap="round">
+        <path d="M486,470 q4,40 22,62"/>
+        <path d="M604,462 q0,42 0,66"/>
+        <path d="M718,470 q-4,40 -22,62"/>
+      </g>
+      <g>
+        <rect x="498" y="528" width="16" height="34" rx="8" fill="#1a1a1a" stroke="#15F35B" stroke-opacity=".5" stroke-width="1.5"/>
+        <rect x="596" y="524" width="17" height="36" rx="8" fill="#1a1a1a" stroke="#15F35B" stroke-opacity=".6" stroke-width="1.5"/>
+        <rect x="690" y="528" width="16" height="34" rx="8" fill="#1a1a1a" stroke="#15F35B" stroke-opacity=".5" stroke-width="1.5"/>
+      </g>
+
+      <!-- LIGHT STANDS w/ softbox (foreground corners) -->
+      <g stroke="#15172f" stroke-width="4" stroke-linecap="round">
+        <!-- left -->
+        <line x1="170" y1="345" x2="170" y2="600"/>
+        <line x1="170" y1="600" x2="130" y2="660"/><line x1="170" y1="600" x2="210" y2="660"/><line x1="170" y1="600" x2="170" y2="668"/>
+        <!-- right -->
+        <line x1="1030" y1="345" x2="1030" y2="600"/>
+        <line x1="1030" y1="600" x2="990" y2="660"/><line x1="1030" y1="600" x2="1070" y2="660"/><line x1="1030" y1="600" x2="1030" y2="668"/>
+      </g>
+      <ellipse cx="225" cy="320" rx="90" ry="40" fill="url(#soft)" opacity=".8"/>
+      <rect x="150" y="270" width="120" height="90" rx="8" fill="#f5f6ff" stroke="#d6d9ee" stroke-width="2" transform="rotate(-8 210 315)"/>
+      <ellipse cx="975" cy="320" rx="90" ry="40" fill="url(#soft)" opacity=".8"/>
+      <rect x="930" y="270" width="120" height="90" rx="8" fill="#f5f6ff" stroke="#d6d9ee" stroke-width="2" transform="rotate(8 990 315)"/>
+
+      <!-- CAMERAS on tripods (foreground) -->
+      <g stroke="#0c0c1c" stroke-width="4" stroke-linecap="round">
+        <line x1="395" y1="520" x2="370" y2="660"/><line x1="395" y1="520" x2="420" y2="660"/><line x1="395" y1="520" x2="398" y2="650"/>
+        <line x1="805" y1="520" x2="780" y2="660"/><line x1="805" y1="520" x2="830" y2="660"/><line x1="805" y1="520" x2="802" y2="650"/>
+      </g>
+      <g>
+        <rect x="362" y="486" width="66" height="40" rx="6" fill="#101023" stroke="#2a2c5a" stroke-width="2"/>
+        <rect x="424" y="496" width="20" height="20" rx="3" fill="#0a0a18"/>
+        <circle cx="434" cy="506" r="7" fill="#1599FF" opacity=".7"/>
+        <rect x="772" y="486" width="66" height="40" rx="6" fill="#101023" stroke="#2a2c5a" stroke-width="2"/>
+        <rect x="756" y="496" width="20" height="20" rx="3" fill="#0a0a18"/>
+        <circle cx="766" cy="506" r="7" fill="#1599FF" opacity=".7"/>
+      </g>
+
+      <!-- PLANT (corner) -->
+      <g>
+        <path d="M1095,640 l16,0 -4,-44 -8,0 z" fill="#2a2c52"/>
+        <path d="M1103,600 q-26,-40 -8,-78 q10,30 18,40 q-2,-44 12,-66 q6,40 4,66 q14,-26 30,-30 q-10,34 -28,54 q22,-8 36,2 q-30,18 -56,16 z" fill="#179a47"/>
+        <path d="M1103,600 q-26,-40 -8,-78 q10,30 18,40 q-2,-44 12,-66 q6,40 4,66 z" fill="#1fbf59" opacity=".8"/>
+      </g>
+
+      <!-- vignette -->
+      <rect x="0" y="0" width="1200" height="700" fill="url(#vig)"/>
+    </svg>
+  </div>
+
+  <div class="cap">
+    <span class="tag"><b>1</b> Bancada diagonal · 3 lugares</span>
+    <span class="tag"><b>2</b> Microfones em braço articulado</span>
+    <span class="tag"><b>3</b> Painel ripado + marca iluminada</span>
+    <span class="tag"><b>4</b> Parede de vidro (vitrine)</span>
+    <span class="tag"><b>5</b> Painéis acústicos</span>
+    <span class="tag"><b>6</b> Iluminação 3 pontos + softbox</span>
+    <span class="tag"><b>7</b> Acento verde Confrapag</span>
+    <span class="tag"><b>8</b> 2 câmeras em tripé</span>
+  </div>
+
+  <div class="note">Ilustração conceitual (vetorial) para comunicar a intenção de projeto — proporções aproximadas, não é render fotorrealista nem planta de execução. Para a versão fotorrealista em IA (Nano Banana / Gemini), basta uma chave OpenRouter com créditos de imagem.</div>
+
+  <div class="links">
+    <a class="primary" href="estudio-podcast.html">← Ver planta baixa técnica</a>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="wrap"><p><b>Estúdio de Podcast Confrapag</b> — Vista conceitual em perspectiva · Sala 18 · Bloco Jeriva, Alphaville</p></div>
+</footer>
+</body>
+</html>
