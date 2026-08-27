@@ -427,6 +427,31 @@ nav a:hover { color: var(--white); background: rgba(255,255,255,.06); }
 
 /* ===================== NOTA REDESIGN ===================== */
 .redesign-pill { position: fixed; bottom: 16px; right: 16px; background: var(--grad); color: var(--dark); padding: 10px 18px; border-radius: 999px; font-size: 12px; font-weight: 800; box-shadow: 0 4px 20px rgba(21,243,91,.4); z-index: 999; letter-spacing: .02em; }
+/* ===================== MISSÃO ===================== */
+.mission-section { background: var(--navy); padding: 66px 0; }
+.mission-text { font-size: 38px; font-weight: 900; color: var(--white); line-height: 1.2; letter-spacing: -.03em; max-width: 920px; margin: 20px auto 14px; }
+.mission-sub { font-size: 16px; color: rgba(255,255,255,.6); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+
+/* ===================== PILARES ===================== */
+.pillars-section { background: var(--gray-lt); }
+.pillars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 8px; }
+.pillar-card { background: #fff; border: 1px solid var(--border-lt); border-radius: var(--radius-lg); padding: 34px 30px; box-shadow: var(--shadow); }
+.pillar-icon { font-size: 34px; margin-bottom: 12px; }
+.pillar-kicker { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #0FA84A; margin-bottom: 10px; }
+.pillar-card h3 { font-size: 20px; font-weight: 800; color: var(--navy); line-height: 1.25; margin-bottom: 12px; letter-spacing: -.02em; }
+.pillar-card p { font-size: 14px; color: var(--gray); line-height: 1.7; margin-bottom: 18px; }
+.pillar-proof { font-size: 12px; font-weight: 600; color: var(--navy); background: var(--grad-soft); border-radius: 999px; padding: 8px 14px; display: inline-block; }
+
+/* ===================== ECOSSISTEMA TECNOLOGIA ===================== */
+.tech-section { background: var(--dark); }
+.tech-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 8px; }
+.tech-card { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px 28px; }
+.tech-icon { font-size: 32px; margin-bottom: 14px; }
+.tech-card h4 { font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 12px; }
+.tech-card p { font-size: 14px; color: rgba(255,255,255,.62); line-height: 1.7; }
+.tech-card strong { color: var(--white); }
+
+@media (max-width: 860px){ .pillars-grid, .tech-grid { grid-template-columns: 1fr; } .mission-text { font-size: 28px; } }
 </style>
 </head>
 <body>
@@ -442,9 +467,11 @@ nav a:hover { color: var(--white); background: rgba(255,255,255,.06); }
         <span class="logo-name">confrapag</span>
       </a>
       <nav>
+        <a href="#pilares">Pilares</a>
         <a href="#modelos">Licenciado</a>
         <a href="#modelos">White Label</a>
         <a href="#solucoes">Soluções</a>
+        <a href="#tecnologia">Tecnologia</a>
         <a href="#universidade">Universidade</a>
         <a href="#diferenciais">Diferenciais</a>
         <a href="#blog">Blog</a>
@@ -542,6 +569,49 @@ nav a:hover { color: var(--white); background: rgba(255,255,255,.06); }
       <div class="stat-col">
         <strong>5 anos</strong>
         <span>Construindo o ecossistema</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== MISSÃO ======================== -->
+<section class="mission-section">
+  <div class="container text-center">
+    <span class="badge badge-dark">Por que existimos</span>
+    <p class="mission-text">Transformar a <span class="text-grad">vida financeira de milhares de famílias</span> pelo Brasil.</p>
+    <p class="mission-sub">Cada licenciado que cresce é uma família com mais renda, mais autonomia e um negócio próprio. É isso que move a Confrapag desde o primeiro dia.</p>
+  </div>
+</section>
+
+<!-- ======================== PILARES ======================== -->
+<section class="section pillars-section" id="pilares">
+  <div class="container">
+    <div class="text-center">
+      <span class="badge badge-grad">No que acreditamos</span>
+      <h2 class="section-title" style="margin-top:16px;color:var(--navy);">Três pilares sustentam tudo o que fazemos</h2>
+      <p class="section-sub">Pessoas, Educação e Tecnologia. É sobre eles que se apoia cada resultado da rede.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">🤝</div>
+        <div class="pillar-kicker">Pilar 01 · Pessoas</div>
+        <h3>Transformamos vidas, não vendemos maquininha</h3>
+        <p>Mais de <strong>800 licenciados ativos</strong> já mudaram sua renda com a Confrapag, faturando de <strong>R$ 5 mil a mais de R$ 40 mil por mês</strong>. Você não entra sozinho: tem gestor comercial dedicado, o Club 714 e a Convenção Nacional para crescer junto de uma comunidade.</p>
+        <div class="pillar-proof">+800 licenciados ativos · presença em todos os estados e no DF</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🎓</div>
+        <div class="pillar-kicker">Pilar 02 · Educação</div>
+        <h3>Você aprende a vender do zero</h3>
+        <p>Ninguém precisa já saber vender pagamentos para começar. A <strong>Universidade Confrapag</strong> forma você do básico ao avançado: o CFI gratuito com certificação, trilhas por nível e o Plano Fast, que te leva ao primeiro cliente em semanas.</p>
+        <div class="pillar-proof">CFI gratuito · trilhas certificadas · Plano Fast</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">⚙️</div>
+        <div class="pillar-kicker">Pilar 03 · Tecnologia</div>
+        <h3>A mesma tecnologia dos grandes, sem construir nada</h3>
+        <p>A plataforma <strong>WeQi</strong> processa mais de <strong>R$ 500 milhões por mês</strong>. O <strong>BaaS</strong> entrega conta digital, PIX e crédito por meio de parceiros regulados. E o <strong>Pulse</strong> é o app onde você credencia clientes e acompanha TPV e comissões em tempo real.</p>
+        <div class="pillar-proof">WeQi · BaaS · Pulse — infraestrutura própria</div>
       </div>
     </div>
   </div>
@@ -901,6 +971,34 @@ nav a:hover { color: var(--white); background: rgba(255,255,255,.06); }
         <h4>ConfraSystem</h4>
         <p>Sistema de gestão para estabelecimentos. Cria dependência tecnológica e amplia o ticket por cliente.</p>
         <span class="sol-tag">✓ Fideliza o cliente</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== ECOSSISTEMA DE TECNOLOGIA ======================== -->
+<section class="section tech-section" id="tecnologia">
+  <div class="container">
+    <div class="text-center on-dark">
+      <span class="badge badge-dark">Pilar da Tecnologia</span>
+      <h2 class="section-title on-dark" style="margin-top:16px;">O ecossistema que roda por baixo</h2>
+      <p class="section-sub on-dark">Três camadas de tecnologia própria, prontas para você operar sem construir nada do zero.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-icon">🧠</div>
+        <h4>WeQi — a plataforma</h4>
+        <p>A tecnologia própria de processamento e orquestração de pagamentos: multiadquirência, captura, conciliação e liquidação num só lugar. Hoje processa <strong>mais de R$ 500 milhões por mês</strong> da rede.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🏦</div>
+        <h4>BaaS — serviços financeiros</h4>
+        <p>Banking as a Service: <strong>conta digital, PIX, boleto, crédito e liquidação</strong> por meio de parceiros regulados. É o que permite ao White Label oferecer uma jornada financeira completa sob a própria marca.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">📱</div>
+        <h4>Pulse — o app do licenciado</h4>
+        <p>Onde você opera o dia a dia: <strong>credencia estabelecimentos, acompanha o TPV da sua carteira e vê as comissões em tempo real</strong>. Gestão da rede na palma da mão, no mobile e no web.</p>
       </div>
     </div>
   </div>
