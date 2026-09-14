@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de Habilidades · Paulo Lemes</title>
+<style>
+:root{--bg:#020817;--panel:#071225;--text:#f7f7fb;--muted:#aeb8cd;--gold:#ff9d00;--purple:#9f4dff;--pink:#ff4f83;--blue:#2787ff;--cyan:#16d7b1}
+*{box-sizing:border-box}
+body{margin:0;background:
+  radial-gradient(1200px 600px at 80% -10%,rgba(159,77,255,.18),transparent 60%),
+  radial-gradient(1000px 500px at -10% 20%,rgba(39,135,255,.16),transparent 55%),
+  var(--bg);
+  color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+  background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(120,140,200,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(120,140,200,.06) 1px,transparent 1px);
+  background-size:34px 34px}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 64px;position:relative}
+.eyebrow{letter-spacing:.32em;text-transform:uppercase;font-size:11px;color:var(--muted)}
+h1{font-size:clamp(30px,6vw,52px);margin:.15em 0 .1em;font-weight:800;
+  background:linear-gradient(90deg,#fff,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.roles{color:var(--muted);font-size:16px}
+.roles b{color:var(--gold);font-weight:600}
+.head{display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.xp{flex:0 0 auto;text-align:center;padding:14px 20px;border-radius:16px;border:1px solid rgba(22,215,177,.5);
+  background:rgba(22,215,177,.08);box-shadow:0 0 30px rgba(22,215,177,.18) inset}
+.xp .n{font-size:40px;font-weight:800;color:var(--cyan);line-height:1}
+.xp .l{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.summary{color:var(--muted);max-width:760px;margin:14px 0 0;line-height:1.55}
+.purpose{margin:26px 0;padding:20px 22px;border-radius:16px;position:relative;overflow:hidden;
+  border:1px solid rgba(159,77,255,.45);background:linear-gradient(135deg,rgba(159,77,255,.14),rgba(39,135,255,.08))}
+.purpose .k{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--purple)}
+.purpose h2{margin:.25em 0 .2em;font-size:clamp(20px,3.4vw,28px)}
+.purpose p{margin:0;color:var(--muted);line-height:1.5}
+h3.sec{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin:34px 0 14px;
+  border-left:3px solid var(--gold);padding-left:10px}
+.essence{display:grid;gap:10px}
+.essence div{padding:12px 16px;border-left:2px solid rgba(255,157,0,.6);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;color:#e9edf7}
+.map{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cell{position:relative;border-radius:16px;padding:16px;background:var(--panel);
+  border:1px solid rgba(255,255,255,.08);transition:transform .15s,box-shadow .15s;min-height:118px}
+.cell:hover{transform:translateY(-3px)}
+.cell .ic{font-size:26px}
+.cell .t{font-weight:700;margin:8px 0 4px;font-size:15px}
+.cell .d{color:var(--muted);font-size:12.5px;line-height:1.4}
+.cell .tip{display:none;margin-top:8px;font-size:11.5px;color:#cdd6ea;border-top:1px dashed rgba(255,255,255,.14);padding-top:8px}
+.cell:hover .tip{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--panel);
+  border:1px solid rgba(255,255,255,.08);max-width:260px}
+.chip .ic{font-size:18px;line-height:1.2}
+.chip .t{font-weight:600;font-size:13px}
+.chip .d{color:var(--muted);font-size:11.5px;line-height:1.35}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.card{padding:14px 16px;border-radius:14px;background:var(--panel);border:1px solid rgba(255,255,255,.08);
+  border-top:3px solid var(--blue)}
+.card .t{font-weight:700;font-size:14px;margin-bottom:4px}
+.card .d{color:var(--muted);font-size:12.5px;line-height:1.4}
+.quote{margin-top:40px;text-align:center;padding:26px}
+.quote .q{font-size:clamp(20px,3.6vw,30px);font-weight:700;
+  background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote .a{color:var(--muted);margin-top:8px;letter-spacing:.12em}
+.foot{margin-top:36px;border-top:1px solid rgba(255,255,255,.08);padding-top:14px;color:#7b8199;font-size:11px}
+.dl{display:inline-block;margin-top:10px;color:var(--cyan);text-decoration:none;border:1px solid rgba(22,215,177,.4);
+  padding:7px 14px;border-radius:10px;font-size:12px}
+.dl:hover{background:rgba(22,215,177,.1)}
+@media(max-width:720px){.map{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.map{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow" id="eyebrow"></div>
+      <h1 id="name"></h1>
+      <div class="roles" id="roles"></div>
+    </div>
+    <div class="xp"><div class="n" id="xpn"></div><div class="l" id="xpl"></div></div>
+  </div>
+  <p class="summary" id="summary"></p>
+
+  <div class="purpose">
+    <div class="k">Propósito</div>
+    <h2 id="ptitle"></h2>
+    <p id="psub"></p>
+  </div>
+
+  <h3 class="sec" id="lb_ess"></h3>
+  <div class="essence" id="essence"></div>
+
+  <h3 class="sec">Mapa de Habilidades</h3>
+  <div class="map" id="map"></div>
+
+  <h3 class="sec" id="lb_core"></h3>
+  <div class="chips" id="core"></div>
+
+  <h3 class="sec" id="lb_special"></h3>
+  <div class="cards" id="special"></div>
+
+  <h3 class="sec" id="lb_equip"></h3>
+  <div class="cards" id="equip"></div>
+
+  <div class="quote"><div class="q" id="qtext"></div><div class="a" id="qauthor"></div></div>
+
+  <div class="foot">
+    <div id="evid"></div>
+    <a class="dl" href="mapa-de-habilidades-paulo-lemes.json" download>Baixar dados (.json)</a>
+  </div>
+</div>
+<script>
+const DATA = {
+  "meta": { "language": "pt-BR", "page_title": "Mapa de Habilidades", "map_title": "Mapa de Habilidades" },
+  "profile": {
+    "name": "Paulo Lemes",
+    "primary_role": "Fundador e CEO em Meios de Pagamento",
+    "secondary_role": "Arquiteto de Redes de Licenciados",
+    "summary": "Fundou e lidera um ecossistema de meios de pagamento construído sobre uma rede nacional de licenciados. Trabalha guiado por dado validado na fonte e decide rápido para destravar o time. O que o diferencia é transformar cada achado em mecanismo com dono e prazo, unindo rigor de números, franqueza e visão de rede."
+  },
+  "experience": { "label": "Experiência", "unit": "anos", "value": 9 },
+  "labels": { "essence": "Essência", "core_attributes": "Atributos Centrais", "special_skills": "Habilidades Especiais", "equipment": "Equipamento" },
+  "essence": {
+    "line_1": "Opera com dado validado na fonte e decide para tirar o time da fila.",
+    "line_2": "Rigor de números, franqueza e uma leitura de negócio como rede que se retroalimenta.",
+    "line_3": "Cria estruturas de pagamento que fazem o pequeno empreendedor ter o próprio negócio."
+  },
+  "purpose": {
+    "title": "Transformar pessoas em empreendedores de pagamento",
+    "subtitle": "Constrói uma rede de licenciados que dá a pequenos empreendedores um negócio de meios de pagamento, sustentada por dados e governança."
+  },
+  "core_attributes": [
+    { "title": "Rigor com dados", "short_description": "Valida o número na fonte antes de bater o martelo.", "icon": "📊", "color": "#2787ff" },
+    { "title": "Franqueza", "short_description": "Fala o que precisa ser dito e busca a melhor prática, não o agrado.", "icon": "🗣️", "color": "#ff4f83" },
+    { "title": "Visão sistêmica", "short_description": "Enxerga o negócio como uma rede que se retroalimenta.", "icon": "🕸️", "color": "#9f4dff" },
+    { "title": "Bias de execução", "short_description": "Decide e destrava, sem esperar reunião.", "icon": "⚡", "color": "#ff9d00" },
+    { "title": "Governança", "short_description": "Todo achado vira controle com dono e prazo.", "icon": "🛡️", "color": "#16d7b1" },
+    { "title": "Liderança", "short_description": "Orquestra times e delega com clareza de responsabilidade.", "icon": "🎯", "color": "#ff5b82" },
+    { "title": "Curiosidade", "short_description": "Aprende ferramentas novas e testa antes de opinar.", "icon": "🔍", "color": "#2787ff" },
+    { "title": "Disciplina", "short_description": "Normaliza, reconcilia e não deixa passar diferença.", "icon": "📐", "color": "#9f4dff" }
+  ],
+  "map_skills": [
+    { "title": "Modelo de meios de pagamento", "description": "Split, MDR, licenciados e estabelecimentos ponta a ponta.", "tooltip": "Domina a economia do split em cascata entre hub, operação, WL e LA, e como cada camada ganha.", "icon": "💳", "color": "#2787ff", "position_class": "s1" },
+    { "title": "Expansão e franquias", "description": "Cresce por rede de parceiros e licenciados.", "tooltip": "Estrutura a entrada de novas operações e a rampa de licenciados até produzirem.", "icon": "🌐", "color": "#9f4dff", "position_class": "s2" },
+    { "title": "Análise e reconciliação", "description": "TPV, margem e custo lidos da base e reconciliados.", "tooltip": "Apura volume e margem operação a operação, sempre normalizando por dia útil e batendo com a fonte.", "icon": "📈", "color": "#16d7b1", "position_class": "s3" },
+    { "title": "Pricing e margem", "description": "MDR e custo por fornecedor sob controle.", "tooltip": "Acompanha net take rate por operação e fornecedor e cobra preço onde a margem escapa.", "icon": "🏷️", "color": "#ff9d00", "position_class": "s4" },
+    { "title": "Risco e compliance", "description": "Bandeira, MCC, KYC e proteção de dados.", "tooltip": "Fecha a porta na causa, de trava de credenciamento a incidente de dados, não só corrige o passado.", "icon": "🛡️", "color": "#ff4f83", "position_class": "s5" },
+    { "title": "Educação e comunidade", "description": "Universidade, trilhas e convenção da rede.", "tooltip": "Usa formação e eventos para desenvolver o licenciado e sustentar o pertencimento à rede.", "icon": "🎓", "color": "#ff5b82", "position_class": "s6" },
+    { "title": "Gestão de canal", "description": "Gestores, leads e produtividade do licenciado.", "tooltip": "Coloca a ferramenta na mão do licenciado e cobra toque no lead antes de ampliar volume.", "icon": "📣", "color": "#2787ff", "position_class": "s7" },
+    { "title": "Estratégia e metas", "description": "Do diagnóstico ao plano com número e data.", "tooltip": "Transforma a leitura dos dados em meta clara e caminho mensal para chegar lá.", "icon": "🧭", "color": "#9f4dff", "position_class": "s8" },
+    { "title": "Tecnologia aplicada", "description": "Painéis, integrações e automação a serviço da decisão.", "tooltip": "Constrói dashboards e integrações para encurtar o caminho entre o dado e a ação.", "icon": "⚙️", "color": "#16d7b1", "position_class": "s9" }
+  ],
+  "special_skills": [
+    { "title": "Achado vira mecanismo", "description": "Corrige o erro e entrega junto o monitoramento com dono e prazo.", "icon": "🔁", "color": "#16d7b1" },
+    { "title": "Número na fonte", "description": "Reconcilia o dado com a origem antes de decidir.", "icon": "🎯", "color": "#2787ff" },
+    { "title": "Destravar no e-mail", "description": "Toma a decisão que tira o time da fila, sem esperar reunião.", "icon": "⚡", "color": "#ff9d00" },
+    { "title": "Cascata do split", "description": "Desenha a economia do hub ao licenciado de ponta a ponta.", "icon": "💧", "color": "#9f4dff" },
+    { "title": "Diferença não é normalização", "description": "Separa mudança combinada de cobrança indevida a apurar.", "icon": "⚖️", "color": "#ff4f83" }
+  ],
+  "equipment": [
+    { "title": "Normalização por dia útil", "description": "Compara sempre na mesma base para não se enganar com o calendário.", "icon": "📅", "color": "#2787ff" },
+    { "title": "Régua de dono e prazo", "description": "Nenhuma pendência sem responsável e data.", "icon": "📌", "color": "#ff5b82" },
+    { "title": "Voz direta", "description": "Vai ao ponto e registra a decisão por escrito.", "icon": "🎙️", "color": "#ff9d00" },
+    { "title": "Melhor prática de mercado", "description": "Busca a referência certa em vez de validar a própria opinião.", "icon": "🧭", "color": "#16d7b1" }
+  ],
+  "quote": { "text": "Planeje, conquiste e cresça!", "author": "Paulo Lemes" },
+  "theme": {
+    "background": "#020817", "panel": "#071225", "text": "#f7f7fb", "muted": "#aeb8cd",
+    "accent_gold": "#ff9d00", "accent_purple": "#9f4dff", "accent_pink": "#ff4f83", "accent_blue": "#2787ff", "accent_cyan": "#16d7b1"
+  },
+  "evidence_summary": {
+    "strongest_signals": [
+      "Fundou e lidera um ecossistema de meios de pagamento com rede de licenciados.",
+      "Exige que o número seja validado na fonte e normalizado antes da decisão.",
+      "Converte achados financeiros em controles recorrentes com dono e prazo.",
+      "Usa plano de carreira, universidade e convenção para desenvolver a rede.",
+      "Decide rápido para destravar a execução do time."
+    ],
+    "uncertain_or_omitted": [
+      "Anos de experiência estimados de forma conservadora a partir da liderança no setor de pagamentos desde cerca de 2016.",
+      "Temas de vida pessoal e informações sensíveis foram deliberadamente omitidos."
+    ]
+  }
+}
+;
+const $=id=>document.getElementById(id);
+document.title=DATA.meta.page_title+" · "+DATA.profile.name;
+$("eyebrow").textContent=DATA.meta.map_title;
+$("name").textContent=DATA.profile.name;
+$("roles").innerHTML="<b>"+DATA.profile.primary_role+"</b> · "+DATA.profile.secondary_role;
+$("xpn").textContent=DATA.experience.value;
+$("xpl").textContent=DATA.experience.label+" · "+DATA.experience.unit;
+$("summary").textContent=DATA.profile.summary;
+$("ptitle").textContent=DATA.purpose.title;
+$("psub").textContent=DATA.purpose.subtitle;
+$("lb_ess").textContent=DATA.labels.essence;
+$("lb_core").textContent=DATA.labels.core_attributes;
+$("lb_special").textContent=DATA.labels.special_skills;
+$("lb_equip").textContent=DATA.labels.equipment;
+$("essence").innerHTML=[DATA.essence.line_1,DATA.essence.line_2,DATA.essence.line_3].map(t=>"<div>"+t+"</div>").join("");
+const order=["s1","s2","s3","s4","s5","s6","s7","s8","s9"];
+const ms=[...DATA.map_skills].sort((a,b)=>order.indexOf(a.position_class)-order.indexOf(b.position_class));
+$("map").innerHTML=ms.map(s=>`<div class="cell" style="border-color:${s.color}55;box-shadow:0 0 22px ${s.color}22 inset">
+  <div class="ic">${s.icon}</div><div class="t" style="color:${s.color}">${s.title}</div>
+  <div class="d">${s.description}</div><div class="tip">${s.tooltip}</div></div>`).join("");
+$("core").innerHTML=DATA.core_attributes.map(a=>`<div class="chip" style="border-color:${a.color}55">
+  <div class="ic">${a.icon}</div><div><div class="t" style="color:${a.color}">${a.title}</div>
+  <div class="d">${a.short_description}</div></div></div>`).join("");
+$("special").innerHTML=DATA.special_skills.map(s=>`<div class="card" style="border-top-color:${s.color}">
+  <div class="t">${s.icon} ${s.title}</div><div class="d">${s.description}</div></div>`).join("");
+$("equip").innerHTML=DATA.equipment.map(s=>`<div class="card" style="border-top-color:${s.color}">
+  <div class="t">${s.icon} ${s.title}</div><div class="d">${s.description}</div></div>`).join("");
+$("qtext").textContent="“"+DATA.quote.text+"”";
+$("qauthor").textContent="— "+DATA.quote.author;
+$("evid").textContent="Perfil construído a partir de evidências de atuação. "+(DATA.evidence_summary.uncertain_or_omitted[0]||"");
+</script>
+</body>
+</html>
